@@ -1,0 +1,312 @@
+<mujoco model="chess_playing_scene">
+  <compiler angle="degree" coordinate="local"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+
+  <asset>
+    <!-- No textures/materials per instructions -->
+  </asset>
+
+  <worldbody>
+    <!-- Lighting -->
+    <light name="key_light" pos="0 0 3" dir="0 0 -1" diffuse="0.9 0.9 0.9" specular="0.2 0.2 0.2"/>
+    <light name="fill_light" pos="2 2 2" dir="-1 -1 -1" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1"/>
+
+    <!-- Table / ground plane -->
+    <geom name="floor" type="plane" pos="0 0 0" size="5 5 0.1" rgba="0.15 0.15 0.15 1"/>
+    <geom name="table" type="box" pos="0 0 0.38" size="0.7 0.7 0.03" rgba="0.35 0.22 0.12 1"/>
+
+    <!-- Chessboard base -->
+    <body name="board" pos="0 0 0.44">
+      <geom name="board_base" type="box" pos="0 0 0" size="0.22 0.22 0.01" rgba="0.08 0.06 0.04 1"/>
+      <!-- 8x8 squares (each square 0.05 x 0.05; board spans 0.4 x 0.4) -->
+      <!-- Coordinates: a1 at (-0.175, -0.175), h8 at (0.175, 0.175) -->
+      <!-- Light squares -->
+      <geom name="sq_a1" type="box" pos="-0.175 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_c1" type="box" pos="-0.075 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_e1" type="box" pos="0.025 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_g1" type="box" pos="0.125 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_b2" type="box" pos="-0.125 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_d2" type="box" pos="-0.025 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_f2" type="box" pos="0.075 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_h2" type="box" pos="0.175 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_a3" type="box" pos="-0.175 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_c3" type="box" pos="-0.075 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_e3" type="box" pos="0.025 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_g3" type="box" pos="0.125 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_b4" type="box" pos="-0.125 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_d4" type="box" pos="-0.025 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_f4" type="box" pos="0.075 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_h4" type="box" pos="0.175 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_a5" type="box" pos="-0.175 0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_c5" type="box" pos="-0.075 0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_e5" type="box" pos="0.025 0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_g5" type="box" pos="0.125 0.025 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_b6" type="box" pos="-0.125 0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_d6" type="box" pos="-0.025 0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_f6" type="box" pos="0.075 0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_h6" type="box" pos="0.175 0.075 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_a7" type="box" pos="-0.175 0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_c7" type="box" pos="-0.075 0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_e7" type="box" pos="0.025 0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_g7" type="box" pos="0.125 0.125 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <geom name="sq_b8" type="box" pos="-0.125 0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_d8" type="box" pos="-0.025 0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_f8" type="box" pos="0.075 0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+      <geom name="sq_h8" type="box" pos="0.175 0.175 0.011" size="0.025 0.025 0.001" rgba="0.88 0.85 0.78 1"/>
+
+      <!-- Dark squares -->
+      <geom name="sq_b1" type="box" pos="-0.125 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_d1" type="box" pos="-0.025 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_f1" type="box" pos="0.075 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_h1" type="box" pos="0.175 -0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_a2" type="box" pos="-0.175 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_c2" type="box" pos="-0.075 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_e2" type="box" pos="0.025 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_g2" type="box" pos="0.125 -0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_b3" type="box" pos="-0.125 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_d3" type="box" pos="-0.025 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_f3" type="box" pos="0.075 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_h3" type="box" pos="0.175 -0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_a4" type="box" pos="-0.175 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_c4" type="box" pos="-0.075 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_e4" type="box" pos="0.025 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_g4" type="box" pos="0.125 -0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_b5" type="box" pos="-0.125 0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_d5" type="box" pos="-0.025 0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_f5" type="box" pos="0.075 0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_h5" type="box" pos="0.175 0.025 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_a6" type="box" pos="-0.175 0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_c6" type="box" pos="-0.075 0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_e6" type="box" pos="0.025 0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_g6" type="box" pos="0.125 0.075 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_b7" type="box" pos="-0.125 0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_d7" type="box" pos="-0.025 0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_f7" type="box" pos="0.075 0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_h7" type="box" pos="0.175 0.125 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+
+      <geom name="sq_a8" type="box" pos="-0.175 0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_c8" type="box" pos="-0.075 0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_e8" type="box" pos="0.025 0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+      <geom name="sq_g8" type="box" pos="0.125 0.175 0.011" size="0.025 0.025 0.001" rgba="0.25 0.22 0.18 1"/>
+    </body>
+
+    <!-- Pieces: approximate "around the 10th turn" using common Italian Game line:
+         1. e4 e5
+         2. Nf3 Nc6
+         3. Bc4 Bc5
+         4. c3 Nf6
+         5. d4 exd4
+         6. cxd4 Bb4+
+         7. Nc3 Nxe4
+         8. O-O Bxc3
+         9. d5 Bf6
+         10. Re1
+       Resulting placements used here (captured: white pawn d4, white bishop f1, black pawn e5, black bishop c5).
+    -->
+
+    <!-- White pieces (ivory) -->
+    <!-- King g1 -->
+    <body name="w_king_g1" pos="0.075 -0.175 0.47">
+      <freejoint name="w_king_g1_free"/>
+      <geom type="cylinder" size="0.012 0.032" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.04" size="0.010" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- Queen d1 -->
+    <body name="w_queen_d1" pos="-0.025 -0.175 0.47">
+      <freejoint name="w_queen_d1_free"/>
+      <geom type="cylinder" size="0.013 0.036" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.045" size="0.011" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- Rooks: a1 and e1 (rook from h1 to e1) -->
+    <body name="w_rook_a1" pos="-0.175 -0.175 0.47">
+      <freejoint name="w_rook_a1_free"/>
+      <geom type="cylinder" size="0.013 0.028" rgba="0.92 0.90 0.85 1"/>
+      <geom type="box" pos="0 0 0.034" size="0.012 0.012 0.006" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <body name="w_rook_e1" pos="0.025 -0.175 0.47">
+      <freejoint name="w_rook_e1_free"/>
+      <geom type="cylinder" size="0.013 0.028" rgba="0.92 0.90 0.85 1"/>
+      <geom type="box" pos="0 0 0.034" size="0.012 0.012 0.006" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- Bishops: c4 and c1 (f1 bishop captured) -->
+    <body name="w_bishop_c4" pos="-0.075 -0.025 0.47">
+      <freejoint name="w_bishop_c4_free"/>
+      <geom type="cylinder" size="0.012 0.033" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.042" size="0.010" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <body name="w_bishop_c1" pos="-0.075 -0.175 0.47">
+      <freejoint name="w_bishop_c1_free"/>
+      <geom type="cylinder" size="0.012 0.033" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.042" size="0.010" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- Knights: c3 and f3 -->
+    <body name="w_knight_c3" pos="-0.075 -0.075 0.47">
+      <freejoint name="w_knight_c3_free"/>
+      <geom type="sphere" size="0.013" rgba="0.92 0.90 0.85 1"/>
+      <geom type="capsule" fromto="0 0 0.015  0.010 0 0.040" size="0.007" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <body name="w_knight_f3" pos="0.075 -0.075 0.47">
+      <freejoint name="w_knight_f3_free"/>
+      <geom type="sphere" size="0.013" rgba="0.92 0.90 0.85 1"/>
+      <geom type="capsule" fromto="0 0 0.015  0.010 0 0.040" size="0.007" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- White pawns: a2 b2 d5 e4 f2 g2 h2 -->
+    <body name="w_pawn_a2" pos="-0.175 -0.125 0.47">
+      <freejoint name="w_pawn_a2_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_b2" pos="-0.125 -0.125 0.47">
+      <freejoint name="w_pawn_b2_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_d5" pos="-0.025 0.025 0.47">
+      <freejoint name="w_pawn_d5_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_e4" pos="0.025 -0.025 0.47">
+      <freejoint name="w_pawn_e4_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_f2" pos="0.075 -0.125 0.47">
+      <freejoint name="w_pawn_f2_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_g2" pos="0.125 -0.125 0.47">
+      <freejoint name="w_pawn_g2_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+    <body name="w_pawn_h2" pos="0.175 -0.125 0.47">
+      <freejoint name="w_pawn_h2_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.92 0.90 0.85 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.92 0.90 0.85 1"/>
+    </body>
+
+    <!-- Black pieces (ebony) -->
+    <!-- King e8 -->
+    <body name="b_king_e8" pos="0.025 0.175 0.47">
+      <freejoint name="b_king_e8_free"/>
+      <geom type="cylinder" size="0.012 0.032" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.04" size="0.010" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- Queen d8 -->
+    <body name="b_queen_d8" pos="-0.025 0.175 0.47">
+      <freejoint name="b_queen_d8_free"/>
+      <geom type="cylinder" size="0.013 0.036" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.045" size="0.011" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- Rooks: a8 and h8 -->
+    <body name="b_rook_a8" pos="-0.175 0.175 0.47">
+      <freejoint name="b_rook_a8_free"/>
+      <geom type="cylinder" size="0.013 0.028" rgba="0.12 0.12 0.12 1"/>
+      <geom type="box" pos="0 0 0.034" size="0.012 0.012 0.006" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <body name="b_rook_h8" pos="0.175 0.175 0.47">
+      <freejoint name="b_rook_h8_free"/>
+      <geom type="cylinder" size="0.013 0.028" rgba="0.12 0.12 0.12 1"/>
+      <geom type="box" pos="0 0 0.034" size="0.012 0.012 0.006" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- Bishops: f6 and f8 (c5 bishop captured) -->
+    <body name="b_bishop_f6" pos="0.075 0.075 0.47">
+      <freejoint name="b_bishop_f6_free"/>
+      <geom type="cylinder" size="0.012 0.033" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.042" size="0.010" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <body name="b_bishop_f8" pos="0.075 0.175 0.47">
+      <freejoint name="b_bishop_f8_free"/>
+      <geom type="cylinder" size="0.012 0.033" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.042" size="0.010" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- Knights: c6 and e4 -->
+    <body name="b_knight_c6" pos="-0.075 0.075 0.47">
+      <freejoint name="b_knight_c6_free"/>
+      <geom type="sphere" size="0.013" rgba="0.12 0.12 0.12 1"/>
+      <geom type="capsule" fromto="0 0 0.015  0.010 0 0.040" size="0.007" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <body name="b_knight_e4" pos="0.025 -0.025 0.47">
+      <freejoint name="b_knight_e4_free"/>
+      <geom type="sphere" size="0.013" rgba="0.12 0.12 0.12 1"/>
+      <geom type="capsule" fromto="0 0 0.015  0.010 0 0.040" size="0.007" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- Black pawns: a7 b7 c7 d7 f7 g7 h7 -->
+    <body name="b_pawn_a7" pos="-0.175 0.125 0.47">
+      <freejoint name="b_pawn_a7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_b7" pos="-0.125 0.125 0.47">
+      <freejoint name="b_pawn_b7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_c7" pos="-0.075 0.125 0.47">
+      <freejoint name="b_pawn_c7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_d7" pos="-0.025 0.125 0.47">
+      <freejoint name="b_pawn_d7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_f7" pos="0.075 0.125 0.47">
+      <freejoint name="b_pawn_f7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_g7" pos="0.125 0.125 0.47">
+      <freejoint name="b_pawn_g7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+    <body name="b_pawn_h7" pos="0.175 0.125 0.47">
+      <freejoint name="b_pawn_h7_free"/>
+      <geom type="cylinder" size="0.010 0.020" rgba="0.12 0.12 0.12 1"/>
+      <geom type="sphere" pos="0 0 0.026" size="0.009" rgba="0.12 0.12 0.12 1"/>
+    </body>
+
+    <!-- A simple chess clock-like block (moving object with freejoint) -->
+    <body name="clock" pos="0.35 0 0.47">
+      <freejoint name="clock_free"/>
+      <geom type="box" size="0.06 0.03 0.03" rgba="0.10 0.10 0.12 1"/>
+      <geom type="box" pos="0 0 0.04" size="0.055 0.025 0.005" rgba="0.20 0.25 0.30 1"/>
+    </body>
+
+    <!-- Camera -->
+    <camera name="main_cam" pos="0.9 -0.9 0.9" xyaxes="0.707 0.707 0  -0.408 0.408 0.816"/>
+  </worldbody>
+</mujoco>

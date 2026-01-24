@@ -1,0 +1,357 @@
+<mujoco model="chemistry_lab">
+  <compiler angle="degree" coordinate="local"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <size njmax="4000" nconmax="2000"/>
+  <visual>
+    <headlight ambient="0.35 0.35 0.35" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2"/>
+    <rgba haze="0.95 0.97 1.0 1"/>
+    <quality shadowsize="2048"/>
+  </visual>
+
+  <worldbody>
+    <!-- Floor -->
+    <geom name="floor" type="plane" size="12 12 0.2"
+          rgba="0.92 0.92 0.94 1" friction="1.0 0.01 0.001"/>
+
+    <!-- Room boundary (visual walls) -->
+    <geom name="wall_n" type="box" pos="0 6 1.5" size="6 0.08 1.5"
+          rgba="0.97 0.97 0.98 1" contype="0" conaffinity="0"/>
+    <geom name="wall_s" type="box" pos="0 -6 1.5" size="6 0.08 1.5"
+          rgba="0.97 0.97 0.98 1" contype="0" conaffinity="0"/>
+    <geom name="wall_e" type="box" pos="6 0 1.5" size="0.08 6 1.5"
+          rgba="0.97 0.97 0.98 1" contype="0" conaffinity="0"/>
+    <geom name="wall_w" type="box" pos="-6 0 1.5" size="0.08 6 1.5"
+          rgba="0.97 0.97 0.98 1" contype="0" conaffinity="0"/>
+
+    <!-- Ceiling (visual) -->
+    <geom name="ceiling" type="box" pos="0 0 3.0" size="6 6 0.06"
+          rgba="0.98 0.98 0.99 1" contype="0" conaffinity="0"/>
+
+    <!-- Overhead lights (visual fixtures) -->
+    <body name="light_fixture_1" pos="-2 0 2.88">
+      <geom type="box" size="0.9 0.25 0.05" rgba="0.85 0.85 0.88 1" contype="0" conaffinity="0"/>
+      <light name="lab_light_1" pos="0 0 -0.05" dir="0 0 -1" directional="true"
+             diffuse="1 1 1" specular="0.2 0.2 0.2" castshadow="true"/>
+    </body>
+    <body name="light_fixture_2" pos="2 0 2.88">
+      <geom type="box" size="0.9 0.25 0.05" rgba="0.85 0.85 0.88 1" contype="0" conaffinity="0"/>
+      <light name="lab_light_2" pos="0 0 -0.05" dir="0 0 -1" directional="true"
+             diffuse="1 1 1" specular="0.2 0.2 0.2" castshadow="true"/>
+    </body>
+
+    <!-- Main lab bench -->
+    <body name="bench" pos="0 0 0">
+      <!-- Bench top -->
+      <geom name="bench_top" type="box" pos="0 0 0.9" size="2.2 0.8 0.06"
+            rgba="0.20 0.20 0.22 1" friction="1.2 0.01 0.001"/>
+      <!-- Bench frame -->
+      <geom name="bench_frame_front" type="box" pos="0 0.78 0.45" size="2.18 0.02 0.45"
+            rgba="0.75 0.75 0.78 1"/>
+      <geom name="bench_frame_back" type="box" pos="0 -0.78 0.45" size="2.18 0.02 0.45"
+            rgba="0.75 0.75 0.78 1"/>
+      <geom name="bench_frame_left" type="box" pos="-2.18 0 0.45" size="0.02 0.78 0.45"
+            rgba="0.75 0.75 0.78 1"/>
+      <geom name="bench_frame_right" type="box" pos="2.18 0 0.45" size="0.02 0.78 0.45"
+            rgba="0.75 0.75 0.78 1"/>
+      <!-- Legs -->
+      <geom name="bench_leg_fl" type="box" pos="-2.0 0.7 0.45" size="0.06 0.06 0.45"
+            rgba="0.65 0.65 0.68 1"/>
+      <geom name="bench_leg_fr" type="box" pos="2.0 0.7 0.45" size="0.06 0.06 0.45"
+            rgba="0.65 0.65 0.68 1"/>
+      <geom name="bench_leg_bl" type="box" pos="-2.0 -0.7 0.45" size="0.06 0.06 0.45"
+            rgba="0.65 0.65 0.68 1"/>
+      <geom name="bench_leg_br" type="box" pos="2.0 -0.7 0.45" size="0.06 0.06 0.45"
+            rgba="0.65 0.65 0.68 1"/>
+
+      <!-- Sink basin + faucet (integrated on bench) -->
+      <geom name="sink_basin_outer" type="box" pos="-1.35 -0.15 0.885" size="0.35 0.25 0.03"
+            rgba="0.55 0.57 0.60 1"/>
+      <geom name="sink_basin_hole" type="box" pos="-1.35 -0.15 0.87" size="0.30 0.20 0.02"
+            rgba="0.18 0.18 0.20 1" contype="0" conaffinity="0"/>
+      <geom name="faucet_post" type="cylinder" pos="-1.55 -0.15 0.97" size="0.025 0.10"
+            rgba="0.70 0.72 0.75 1"/>
+      <geom name="faucet_spout" type="capsule" fromto="-1.55 -0.15 1.05 -1.35 -0.15 1.05"
+            size="0.015" rgba="0.70 0.72 0.75 1"/>
+
+      <!-- Gas tap manifold -->
+      <geom name="gas_manifold" type="box" pos="1.55 -0.6 0.98" size="0.25 0.07 0.03"
+            rgba="0.70 0.70 0.74 1"/>
+      <geom name="gas_knob_1" type="cylinder" pos="1.45 -0.62 1.02" size="0.03 0.02"
+            rgba="0.85 0.2 0.2 1"/>
+      <geom name="gas_knob_2" type="cylinder" pos="1.55 -0.62 1.02" size="0.03 0.02"
+            rgba="0.2 0.6 0.9 1"/>
+      <geom name="gas_knob_3" type="cylinder" pos="1.65 -0.62 1.02" size="0.03 0.02"
+            rgba="0.2 0.8 0.3 1"/>
+    </body>
+
+    <!-- Back counter with shelving -->
+    <body name="back_counter" pos="0 -3.8 0">
+      <geom name="back_counter_top" type="box" pos="0 0 0.92" size="2.6 0.55 0.06"
+            rgba="0.18 0.18 0.20 1" friction="1.2 0.01 0.001"/>
+      <geom name="back_counter_base" type="box" pos="0 0 0.45" size="2.6 0.55 0.45"
+            rgba="0.86 0.86 0.88 1"/>
+      <!-- Shelves -->
+      <geom name="shelf_1" type="box" pos="0 0 1.35" size="2.6 0.25 0.03"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="shelf_2" type="box" pos="0 0 1.75" size="2.6 0.25 0.03"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="shelf_3" type="box" pos="0 0 2.15" size="2.6 0.25 0.03"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <!-- Pegboard -->
+      <geom name="pegboard" type="box" pos="0 0.5 1.55" size="2.6 0.02 0.7"
+            rgba="0.95 0.95 0.96 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Fume hood -->
+    <body name="fume_hood" pos="4.0 -2.0 0">
+      <geom name="hood_base" type="box" pos="0 0 0.45" size="1.2 0.9 0.45"
+            rgba="0.88 0.88 0.90 1"/>
+      <geom name="hood_worktop" type="box" pos="0 0 0.92" size="1.2 0.9 0.05"
+            rgba="0.20 0.20 0.22 1"/>
+      <geom name="hood_back" type="box" pos="0 -0.85 1.65" size="1.2 0.05 0.75"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="hood_sides_l" type="box" pos="-1.15 0 1.65" size="0.05 0.9 0.75"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="hood_sides_r" type="box" pos="1.15 0 1.65" size="0.05 0.9 0.75"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="hood_top" type="box" pos="0 0 2.45" size="1.2 0.9 0.05"
+            rgba="0.88 0.88 0.90 1" contype="0" conaffinity="0"/>
+      <!-- Front sash (glass) -->
+      <geom name="hood_sash" type="box" pos="0 0.85 1.75" size="1.18 0.02 0.65"
+            rgba="0.70 0.85 0.95 0.25" contype="0" conaffinity="0"/>
+      <!-- Duct -->
+      <geom name="hood_duct" type="cylinder" pos="0 -0.75 2.85" size="0.18 0.25"
+            rgba="0.75 0.75 0.78 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Emergency shower / eyewash station -->
+    <body name="safety_station" pos="-4.5 -2.5 0">
+      <geom name="safety_post" type="cylinder" pos="0 0 1.1" size="0.06 1.1"
+            rgba="0.25 0.65 0.30 1"/>
+      <geom name="shower_head" type="cylinder" pos="0 0 2.25" size="0.18 0.04"
+            rgba="0.25 0.65 0.30 1" contype="0" conaffinity="0"/>
+      <geom name="eyewash_bowl" type="cylinder" pos="0 0 1.0" size="0.20 0.05"
+            rgba="0.25 0.65 0.30 1"/>
+      <geom name="eyewash_nozzle_l" type="sphere" pos="-0.06 0 1.08" size="0.03"
+            rgba="0.10 0.40 0.85 1" contype="0" conaffinity="0"/>
+      <geom name="eyewash_nozzle_r" type="sphere" pos="0.06 0 1.08" size="0.03"
+            rgba="0.10 0.40 0.85 1" contype="0" conaffinity="0"/>
+      <geom name="pull_handle" type="capsule" fromto="0 0.15 1.65 0 0.15 1.25"
+            size="0.02" rgba="0.85 0.85 0.10 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Fire extinguisher (movable) -->
+    <body name="fire_extinguisher" pos="-4.2 -1.6 0.15">
+      <freejoint/>
+      <geom name="ext_body" type="cylinder" pos="0 0 0.25" size="0.08 0.25"
+            rgba="0.85 0.10 0.10 1" friction="0.9 0.01 0.001" density="700"/>
+      <geom name="ext_neck" type="cylinder" pos="0 0 0.53" size="0.04 0.05"
+            rgba="0.75 0.75 0.78 1" density="700"/>
+      <geom name="ext_handle" type="box" pos="0 0.05 0.60" size="0.08 0.02 0.02"
+            rgba="0.10 0.10 0.10 1" density="500"/>
+      <geom name="ext_hose" type="capsule" fromto="0.05 0.0 0.58 0.16 0.08 0.48"
+            size="0.015" rgba="0.10 0.10 0.10 1" density="400"/>
+    </body>
+
+    <!-- Lab stool (movable) -->
+    <body name="lab_stool" pos="0.0 1.6 0.25">
+      <freejoint/>
+      <geom name="stool_seat" type="cylinder" pos="0 0 0.45" size="0.22 0.04"
+            rgba="0.15 0.15 0.18 1" density="500"/>
+      <geom name="stool_post" type="cylinder" pos="0 0 0.23" size="0.03 0.23"
+            rgba="0.65 0.65 0.68 1" density="700"/>
+      <geom name="stool_base_1" type="capsule" fromto="0 0 0.05 0.25 0 0.05"
+            size="0.02" rgba="0.65 0.65 0.68 1" density="700"/>
+      <geom name="stool_base_2" type="capsule" fromto="0 0 0.05 -0.25 0 0.05"
+            size="0.02" rgba="0.65 0.65 0.68 1" density="700"/>
+      <geom name="stool_base_3" type="capsule" fromto="0 0 0.05 0 0.25 0.05"
+            size="0.02" rgba="0.65 0.65 0.68 1" density="700"/>
+      <geom name="stool_base_4" type="capsule" fromto="0 0 0.05 0 -0.25 0.05"
+            size="0.02" rgba="0.65 0.65 0.68 1" density="700"/>
+    </body>
+
+    <!-- Microscope (movable) -->
+    <body name="microscope" pos="0.6 0.2 0.98">
+      <freejoint/>
+      <geom name="micro_base" type="box" pos="0 0 0.02" size="0.12 0.09 0.02"
+            rgba="0.18 0.18 0.20 1" density="800"/>
+      <geom name="micro_arm" type="capsule" fromto="-0.02 -0.02 0.04 -0.02 -0.04 0.22"
+            size="0.025" rgba="0.75 0.75 0.78 1" density="800"/>
+      <geom name="micro_body" type="box" pos="-0.02 -0.06 0.26" size="0.06 0.04 0.06"
+            rgba="0.75 0.75 0.78 1" density="800"/>
+      <geom name="micro_head" type="cylinder" pos="-0.02 -0.08 0.34" size="0.03 0.06"
+            rgba="0.10 0.10 0.12 1" density="700"/>
+      <geom name="micro_stage" type="box" pos="0.03 -0.02 0.18" size="0.09 0.06 0.01"
+            rgba="0.10 0.10 0.12 1" density="700"/>
+      <geom name="micro_knob" type="sphere" pos="0.08 -0.06 0.22" size="0.02"
+            rgba="0.20 0.20 0.22 1" density="500"/>
+    </body>
+
+    <!-- Balance scale (movable) -->
+    <body name="balance_scale" pos="-0.4 0.25 0.98">
+      <freejoint/>
+      <geom name="scale_base" type="box" pos="0 0 0.02" size="0.16 0.12 0.02"
+            rgba="0.85 0.85 0.88 1" density="900"/>
+      <geom name="scale_body" type="box" pos="0 0 0.10" size="0.14 0.10 0.08"
+            rgba="0.92 0.92 0.94 1" density="900"/>
+      <geom name="scale_pan" type="cylinder" pos="0 0 0.20" size="0.07 0.01"
+            rgba="0.65 0.65 0.68 1" density="700"/>
+      <geom name="scale_screen" type="box" pos="0.06 0.0 0.14" size="0.03 0.05 0.02"
+            rgba="0.10 0.15 0.20 1" density="700"/>
+    </body>
+
+    <!-- Test tube rack (movable) -->
+    <body name="test_tube_rack" pos="-0.2 -0.2 0.98">
+      <freejoint/>
+      <geom name="rack_base" type="box" pos="0 0 0.015" size="0.16 0.08 0.015"
+            rgba="0.65 0.45 0.25 1" density="700"/>
+      <geom name="rack_top" type="box" pos="0 0 0.06" size="0.16 0.08 0.01"
+            rgba="0.65 0.45 0.25 1" density="700"/>
+      <!-- Test tubes (thin cylinders) -->
+      <geom name="tube_1" type="cylinder" pos="-0.10 -0.03 0.13" size="0.012 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="tube_2" type="cylinder" pos="-0.05 -0.03 0.13" size="0.012 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="tube_3" type="cylinder" pos="0.00 -0.03 0.13" size="0.012 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="tube_4" type="cylinder" pos="0.05 -0.03 0.13" size="0.012 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="tube_5" type="cylinder" pos="0.10 -0.03 0.13" size="0.012 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <!-- Colored liquid (visual-only inserts) -->
+      <geom name="tube_1_liquid" type="cylinder" pos="-0.10 -0.03 0.105" size="0.010 0.035"
+            rgba="0.20 0.60 0.95 0.55" contype="0" conaffinity="0"/>
+      <geom name="tube_2_liquid" type="cylinder" pos="-0.05 -0.03 0.095" size="0.010 0.025"
+            rgba="0.95 0.35 0.20 0.55" contype="0" conaffinity="0"/>
+      <geom name="tube_3_liquid" type="cylinder" pos="0.00 -0.03 0.11" size="0.010 0.04"
+            rgba="0.25 0.85 0.35 0.55" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Beaker (movable) -->
+    <body name="beaker" pos="0.2 -0.15 0.98">
+      <freejoint/>
+      <geom name="beaker_glass" type="cylinder" pos="0 0 0.07" size="0.045 0.07"
+            rgba="0.70 0.90 1.00 0.25" density="400" friction="0.6 0.01 0.001"/>
+      <geom name="beaker_liquid" type="cylinder" pos="0 0 0.045" size="0.043 0.04"
+            rgba="0.15 0.55 0.95 0.6" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Erlenmeyer flask (approximated with stacked cylinders; movable) -->
+    <body name="erlenmeyer_flask" pos="0.35 -0.05 0.98">
+      <freejoint/>
+      <geom name="flask_base" type="cylinder" pos="0 0 0.045" size="0.05 0.045"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="flask_mid" type="cylinder" pos="0 0 0.095" size="0.035 0.05"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="flask_neck" type="cylinder" pos="0 0 0.155" size="0.018 0.06"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="flask_liquid" type="cylinder" pos="0 0 0.04" size="0.045 0.03"
+            rgba="0.85 0.25 0.65 0.6" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Graduated cylinder (movable) -->
+    <body name="graduated_cylinder" pos="0.05 0.05 0.98">
+      <freejoint/>
+      <geom name="grad_cyl_body" type="cylinder" pos="0 0 0.11" size="0.018 0.11"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="grad_cyl_base" type="cylinder" pos="0 0 0.01" size="0.04 0.01"
+            rgba="0.70 0.90 1.00 0.25" density="400"/>
+      <geom name="grad_cyl_liquid" type="cylinder" pos="0 0 0.07" size="0.016 0.06"
+            rgba="0.95 0.80 0.20 0.6" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Bunsen burner (movable) -->
+    <body name="bunsen_burner" pos="1.4 0.15 0.98">
+      <freejoint/>
+      <geom name="burner_base" type="cylinder" pos="0 0 0.015" size="0.06 0.015"
+            rgba="0.25 0.25 0.28 1" density="900"/>
+      <geom name="burner_tube" type="cylinder" pos="0 0 0.11" size="0.015 0.10"
+            rgba="0.60 0.60 0.65 1" density="900"/>
+      <geom name="burner_collar" type="cylinder" pos="0 0 0.06" size="0.02 0.02"
+            rgba="0.45 0.45 0.50 1" density="900"/>
+      <light name="burner_glow" pos="0 0 0.23" dir="0 0 1" directional="false"
+             diffuse="0.2 0.35 0.9" specular="0 0 0" attenuation="0.6 0.1 0.02"/>
+    </body>
+
+    <!-- Chemical waste bin (movable) -->
+    <body name="waste_bin" pos="-1.7 1.2 0.2">
+      <freejoint/>
+      <geom name="bin_body" type="cylinder" pos="0 0 0.25" size="0.18 0.25"
+            rgba="0.95 0.95 0.40 1" density="600"/>
+      <geom name="bin_lid" type="cylinder" pos="0 0 0.53" size="0.19 0.03"
+            rgba="0.80 0.80 0.20 1" density="600"/>
+    </body>
+
+    <!-- Refrigerator / chemical storage cabinet -->
+    <body name="storage_cabinet" pos="-4.4 2.2 0">
+      <geom name="cab_body" type="box" pos="0 0 1.0" size="0.7 0.6 1.0"
+            rgba="0.92 0.92 0.94 1"/>
+      <geom name="cab_door_left" type="box" pos="-0.34 0.61 1.0" size="0.34 0.02 0.98"
+            rgba="0.88 0.88 0.90 1" contype="0" conaffinity="0"/>
+      <geom name="cab_door_right" type="box" pos="0.34 0.61 1.0" size="0.34 0.02 0.98"
+            rgba="0.88 0.88 0.90 1" contype="0" conaffinity="0"/>
+      <geom name="cab_handle_l" type="capsule" fromto="-0.55 0.64 1.15 -0.55 0.64 0.85"
+            size="0.015" rgba="0.65 0.65 0.68 1" contype="0" conaffinity="0"/>
+      <geom name="cab_handle_r" type="capsule" fromto="0.55 0.64 1.15 0.55 0.64 0.85"
+            size="0.015" rgba="0.65 0.65 0.68 1" contype="0" conaffinity="0"/>
+      <geom name="cab_top" type="box" pos="0 0 2.05" size="0.7 0.6 0.05"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Rolling cart (movable) -->
+    <body name="rolling_cart" pos="2.5 2.0 0">
+      <freejoint/>
+      <geom name="cart_top" type="box" pos="0 0 0.85" size="0.6 0.4 0.03"
+            rgba="0.80 0.80 0.82 1" density="500"/>
+      <geom name="cart_shelf" type="box" pos="0 0 0.45" size="0.6 0.4 0.02"
+            rgba="0.80 0.80 0.82 1" density="500"/>
+      <geom name="cart_leg_1" type="cylinder" pos="-0.55 -0.35 0.42" size="0.02 0.42"
+            rgba="0.60 0.60 0.65 1" density="700"/>
+      <geom name="cart_leg_2" type="cylinder" pos="0.55 -0.35 0.42" size="0.02 0.42"
+            rgba="0.60 0.60 0.65 1" density="700"/>
+      <geom name="cart_leg_3" type="cylinder" pos="-0.55 0.35 0.42" size="0.02 0.42"
+            rgba="0.60 0.60 0.65 1" density="700"/>
+      <geom name="cart_leg_4" type="cylinder" pos="0.55 0.35 0.42" size="0.02 0.42"
+            rgba="0.60 0.60 0.65 1" density="700"/>
+      <geom name="cart_wheel_1" type="cylinder" pos="-0.55 -0.35 0.05" size="0.06 0.02"
+            rgba="0.12 0.12 0.12 1" density="800"/>
+      <geom name="cart_wheel_2" type="cylinder" pos="0.55 -0.35 0.05" size="0.06 0.02"
+            rgba="0.12 0.12 0.12 1" density="800"/>
+      <geom name="cart_wheel_3" type="cylinder" pos="-0.55 0.35 0.05" size="0.06 0.02"
+            rgba="0.12 0.12 0.12 1" density="800"/>
+      <geom name="cart_wheel_4" type="cylinder" pos="0.55 0.35 0.05" size="0.06 0.02"
+            rgba="0.12 0.12 0.12 1" density="800"/>
+    </body>
+
+    <!-- Small chemical bottles on the back shelves (static, visual) -->
+    <body name="shelf_bottles" pos="0 -3.8 0">
+      <geom name="bottle_1" type="cylinder" pos="-1.6 0.15 1.44" size="0.04 0.10"
+            rgba="0.95 0.85 0.20 0.6" contype="0" conaffinity="0"/>
+      <geom name="bottle_1_cap" type="cylinder" pos="-1.6 0.15 1.56" size="0.03 0.02"
+            rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+
+      <geom name="bottle_2" type="cylinder" pos="-1.2 0.15 1.44" size="0.04 0.10"
+            rgba="0.20 0.85 0.35 0.55" contype="0" conaffinity="0"/>
+      <geom name="bottle_2_cap" type="cylinder" pos="-1.2 0.15 1.56" size="0.03 0.02"
+            rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+
+      <geom name="bottle_3" type="cylinder" pos="-0.8 0.15 1.44" size="0.04 0.10"
+            rgba="0.25 0.55 0.95 0.55" contype="0" conaffinity="0"/>
+      <geom name="bottle_3_cap" type="cylinder" pos="-0.8 0.15 1.56" size="0.03 0.02"
+            rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+
+      <geom name="bottle_4" type="cylinder" pos="0.8 0.15 1.84" size="0.035 0.09"
+            rgba="0.95 0.55 0.20 0.55" contype="0" conaffinity="0"/>
+      <geom name="bottle_4_cap" type="cylinder" pos="0.8 0.15 1.95" size="0.028 0.02"
+            rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+
+      <geom name="bottle_5" type="cylinder" pos="1.2 0.15 1.84" size="0.035 0.09"
+            rgba="0.85 0.25 0.65 0.55" contype="0" conaffinity="0"/>
+      <geom name="bottle_5_cap" type="cylinder" pos="1.2 0.15 1.95" size="0.028 0.02"
+            rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Camera -->
+    <camera name="main_cam" pos="6 4 3.2" xyaxes="-0.6 0.8 0  -0.25 -0.19 0.95"/>
+  </worldbody>
+</mujoco>

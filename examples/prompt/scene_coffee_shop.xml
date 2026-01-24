@@ -1,0 +1,186 @@
+<mujoco model="coffee_shop_espresso_machine">
+  <compiler angle="degree" coordinate="local"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <size njmax="2000" nconmax="400"/>
+
+  <default>
+    <geom contype="1" conaffinity="1" friction="0.9 0.1 0.001" solref="0.02 1" solimp="0.9 0.95 0.001" rgba="0.8 0.8 0.8 1"/>
+    <joint damping="1" armature="0.01" limited="true"/>
+  </default>
+
+  <worldbody>
+    <!-- Floor -->
+    <geom name="floor" type="plane" pos="0 0 0" size="6 6 0.1" rgba="0.18 0.17 0.16 1"
+          contype="1" conaffinity="1" friction="1.2 0.1 0.001"/>
+
+    <!-- Back wall -->
+    <geom name="wall_back" type="box" pos="0 -2.5 1.2" size="6 0.05 1.2" rgba="0.92 0.92 0.94 1"
+          contype="1" conaffinity="1"/>
+    <!-- Side wall -->
+    <geom name="wall_side" type="box" pos="-2.5 0 1.2" size="0.05 6 1.2" rgba="0.93 0.93 0.95 1"
+          contype="1" conaffinity="1"/>
+
+    <!-- Counter / bar -->
+    <body name="counter" pos="0 0 0">
+      <geom name="counter_base" type="box" pos="0 0 0.45" size="1.6 0.65 0.45" rgba="0.25 0.18 0.12 1"
+            contype="1" conaffinity="1" friction="1.0 0.1 0.001"/>
+      <geom name="counter_top" type="box" pos="0 0 0.92" size="1.65 0.7 0.03" rgba="0.08 0.08 0.09 1"
+            contype="1" conaffinity="1" friction="1.1 0.1 0.001"/>
+
+      <!-- Espresso machine (high-end) sitting on counter -->
+      <body name="espresso_machine" pos="0 0 0.95">
+        <!-- Machine chassis -->
+        <geom name="machine_base" type="box" pos="0 0 0.09" size="0.36 0.22 0.09" rgba="0.08 0.08 0.085 1"
+              contype="1" conaffinity="1"/>
+        <geom name="machine_shell" type="box" pos="0 0 0.30" size="0.36 0.22 0.12" rgba="0.75 0.76 0.78 1"
+              contype="1" conaffinity="1"/>
+        <geom name="machine_top" type="box" pos="0 0 0.45" size="0.36 0.22 0.04" rgba="0.12 0.12 0.13 1"
+              contype="1" conaffinity="1"/>
+
+        <!-- Drip tray -->
+        <geom name="drip_tray" type="box" pos="0.0 0.0 0.11" size="0.33 0.18 0.01" rgba="0.15 0.15 0.16 1"
+              contype="1" conaffinity="1" friction="0.9 0.1 0.001"/>
+
+        <!-- Front panel / grouphead housing -->
+        <geom name="front_panel" type="box" pos="0.26 0 0.26" size="0.08 0.20 0.13" rgba="0.65 0.66 0.68 1"
+              contype="1" conaffinity="1"/>
+
+        <!-- Dual groupheads -->
+        <body name="grouphead_left" pos="0.30 0.10 0.27">
+          <geom name="gh_left" type="cylinder" pos="0 0 0" size="0.035 0.045" rgba="0.20 0.20 0.21 1"
+                contype="1" conaffinity="1"/>
+          <geom name="gh_left_nose" type="cylinder" pos="0.05 0 0" size="0.012 0.02" rgba="0.18 0.18 0.19 1"
+                euler="0 90 0" contype="1" conaffinity="1"/>
+        </body>
+
+        <body name="grouphead_right" pos="0.30 -0.10 0.27">
+          <geom name="gh_right" type="cylinder" pos="0 0 0" size="0.035 0.045" rgba="0.20 0.20 0.21 1"
+                contype="1" conaffinity="1"/>
+          <geom name="gh_right_nose" type="cylinder" pos="0.05 0 0" size="0.012 0.02" rgba="0.18 0.18 0.19 1"
+                euler="0 90 0" contype="1" conaffinity="1"/>
+        </body>
+
+        <!-- Steam wand (poseable hinge) -->
+        <body name="steam_wand" pos="0.18 0.20 0.24">
+          <joint name="steam_wand_yaw" type="hinge" axis="0 0 1" range="-70 70" damping="1.5"/>
+          <geom name="steam_wand_arm" type="capsule" fromto="0 0 0  0.18 0.02 -0.12"
+                size="0.008" rgba="0.70 0.70 0.72 1" contype="1" conaffinity="1"/>
+          <geom name="steam_wand_tip" type="cylinder" pos="0.18 0.02 -0.12" size="0.01 0.015"
+                rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+        </body>
+
+        <!-- Hot water spout -->
+        <geom name="hot_water_spout" type="capsule" fromto="0.20 -0.18 0.28  0.28 -0.18 0.18"
+              size="0.007" rgba="0.72 0.72 0.74 1" contype="1" conaffinity="1"/>
+
+        <!-- Control panel / display -->
+        <geom name="display" type="box" pos="0.28 0 0.41" size="0.06 0.16 0.03" rgba="0.02 0.02 0.025 1"
+              contype="0" conaffinity="0"/>
+        <geom name="display_glass" type="box" pos="0.285 0 0.41" size="0.002 0.15 0.028"
+              rgba="0.08 0.10 0.12 0.6" contype="0" conaffinity="0"/>
+
+        <!-- Cup rail on top -->
+        <geom name="cup_rail_left" type="capsule" fromto="-0.30 0.18 0.49  0.30 0.18 0.49"
+              size="0.01" rgba="0.30 0.30 0.32 1" contype="1" conaffinity="1"/>
+        <geom name="cup_rail_right" type="capsule" fromto="-0.30 -0.18 0.49  0.30 -0.18 0.49"
+              size="0.01" rgba="0.30 0.30 0.32 1" contype="1" conaffinity="1"/>
+      </body>
+
+      <!-- Coffee grinder next to machine (static) -->
+      <body name="grinder" pos="-0.65 0.05 0.95">
+        <geom name="grinder_base" type="box" pos="0 0 0.12" size="0.14 0.14 0.12" rgba="0.10 0.10 0.11 1"
+              contype="1" conaffinity="1"/>
+        <geom name="grinder_body" type="box" pos="0 0 0.34" size="0.12 0.12 0.10" rgba="0.55 0.56 0.58 1"
+              contype="1" conaffinity="1"/>
+        <geom name="grinder_hopper" type="cylinder" pos="0 0 0.52" size="0.09 0.10"
+              rgba="0.85 0.90 0.95 0.35" contype="0" conaffinity="0"/>
+        <geom name="grinder_spout" type="capsule" fromto="0.10 0 0.30  0.16 0 0.26"
+              size="0.01" rgba="0.20 0.20 0.21 1" contype="1" conaffinity="1"/>
+      </body>
+
+      <!-- Sink inset on counter (static) -->
+      <body name="sink" pos="0.75 -0.05 0.92">
+        <geom name="sink_cutout" type="box" pos="0 0 -0.02" size="0.22 0.18 0.02"
+              rgba="0.06 0.06 0.065 1" contype="0" conaffinity="0"/>
+        <geom name="sink_basin" type="box" pos="0 0 -0.09" size="0.20 0.16 0.07"
+              rgba="0.65 0.66 0.68 1" contype="1" conaffinity="1"/>
+        <geom name="faucet_stem" type="cylinder" pos="-0.12 0 0.04" size="0.015 0.05"
+              rgba="0.70 0.70 0.72 1" contype="1" conaffinity="1"/>
+        <geom name="faucet_spout" type="capsule" fromto="-0.12 0 0.08  0.05 0 0.08"
+              size="0.012" rgba="0.70 0.70 0.72 1" contype="1" conaffinity="1"/>
+      </body>
+    </body>
+
+    <!-- Small movable objects: cups -->
+    <body name="cup_1" pos="0.18 0.10 0.97">
+      <freejoint/>
+      <geom name="cup1_outer" type="cylinder" pos="0 0 0.05" size="0.035 0.05"
+            rgba="0.95 0.95 0.96 1" contype="1" conaffinity="1" friction="0.8 0.1 0.001"/>
+      <geom name="cup1_inner" type="cylinder" pos="0 0 0.055" size="0.032 0.045"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="cup1_handle" type="capsule" fromto="0.035 0 0.06  0.060 0 0.06"
+            size="0.007" rgba="0.95 0.95 0.96 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <body name="cup_2" pos="0.18 -0.10 0.97">
+      <freejoint/>
+      <geom name="cup2_outer" type="cylinder" pos="0 0 0.05" size="0.035 0.05"
+            rgba="0.96 0.96 0.97 1" contype="1" conaffinity="1" friction="0.8 0.1 0.001"/>
+      <geom name="cup2_inner" type="cylinder" pos="0 0 0.055" size="0.032 0.045"
+            rgba="0.90 0.90 0.92 1" contype="0" conaffinity="0"/>
+      <geom name="cup2_handle" type="capsule" fromto="0.035 0 0.06  0.060 0 0.06"
+            size="0.007" rgba="0.96 0.96 0.97 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Movable portafilter on counter -->
+    <body name="portafilter" pos="-0.10 0.25 0.97">
+      <freejoint/>
+      <geom name="pf_handle" type="capsule" fromto="0 0 0.02  0.18 0 0.02"
+            size="0.018" rgba="0.10 0.07 0.04 1" contype="1" conaffinity="1"/>
+      <geom name="pf_head" type="cylinder" pos="-0.03 0 0.03" size="0.045 0.025"
+            rgba="0.70 0.70 0.72 1" contype="1" conaffinity="1"/>
+      <geom name="pf_spout" type="capsule" fromto="-0.05 0.01 0.00  -0.08 0.01 -0.02"
+            size="0.006" rgba="0.65 0.65 0.67 1" contype="1" conaffinity="1"/>
+      <geom name="pf_spout2" type="capsule" fromto="-0.05 -0.01 0.00  -0.08 -0.01 -0.02"
+            size="0.006" rgba="0.65 0.65 0.67 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Movable milk pitcher -->
+    <body name="milk_pitcher" pos="0.55 0.20 0.97">
+      <freejoint/>
+      <geom name="pitcher_body" type="cylinder" pos="0 0 0.06" size="0.045 0.06"
+            rgba="0.75 0.76 0.78 1" contype="1" conaffinity="1" friction="0.7 0.1 0.001"/>
+      <geom name="pitcher_rim" type="cylinder" pos="0 0 0.12" size="0.048 0.008"
+            rgba="0.65 0.66 0.68 1" contype="1" conaffinity="1"/>
+      <geom name="pitcher_handle" type="capsule" fromto="0.045 0 0.08  0.080 0 0.08"
+            size="0.009" rgba="0.75 0.76 0.78 1" contype="1" conaffinity="1"/>
+      <geom name="pitcher_spout" type="capsule" fromto="-0.045 0 0.115  -0.070 0 0.105"
+            size="0.006" rgba="0.65 0.66 0.68 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Simple bar stool (static) -->
+    <body name="stool" pos="1.2 1.0 0">
+      <geom name="stool_seat" type="cylinder" pos="0 0 0.75" size="0.18 0.04"
+            rgba="0.12 0.12 0.13 1" contype="1" conaffinity="1"/>
+      <geom name="stool_post" type="cylinder" pos="0 0 0.40" size="0.04 0.40"
+            rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+      <geom name="stool_base1" type="capsule" fromto="0 0 0.02  0.25 0 0.02"
+            size="0.02" rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+      <geom name="stool_base2" type="capsule" fromto="0 0 0.02  -0.25 0 0.02"
+            size="0.02" rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+      <geom name="stool_base3" type="capsule" fromto="0 0 0.02  0 0.25 0.02"
+            size="0.02" rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+      <geom name="stool_base4" type="capsule" fromto="0 0 0.02  0 -0.25 0.02"
+            size="0.02" rgba="0.25 0.25 0.26 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Lighting -->
+    <light name="ceiling_light" pos="0 0 3.0" dir="0 0 -1" diffuse="0.9 0.9 0.9" specular="0.2 0.2 0.2"/>
+    <light name="bar_light" pos="0.0 0.2 1.8" dir="0 0 -1" diffuse="0.7 0.7 0.7" specular="0.2 0.2 0.2"/>
+  </worldbody>
+
+  <visual>
+    <headlight diffuse="0.4 0.4 0.4" ambient="0.2 0.2 0.2" specular="0.1 0.1 0.1"/>
+    <rgba haze="0.9 0.9 0.92 1"/>
+  </visual>
+</mujoco>

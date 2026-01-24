@@ -1,0 +1,225 @@
+<mujoco model="childrens_playground_toys">
+  <compiler angle="degree" coordinate="local"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+
+  <visual>
+    <headlight ambient="0.35 0.35 0.35" diffuse="0.7 0.7 0.7" specular="0.1 0.1 0.1"/>
+    <rgba haze="0.9 0.95 1 1"/>
+  </visual>
+
+  <asset>
+    <!-- No textures/materials per instructions -->
+  </asset>
+
+  <worldbody>
+    <!-- Ground -->
+    <geom name="ground" type="plane" size="30 30 0.1" rgba="0.80 0.92 0.80 1" friction="1 0.02 0.001"/>
+
+    <!-- Soft-ish sandbox border (static) -->
+    <body name="sandbox" pos="3 3 0">
+      <geom name="sandbox_floor" type="box" pos="0 0 0.05" size="1.6 1.6 0.05" rgba="0.93 0.85 0.60 1" friction="1.2 0.02 0.001"/>
+      <!-- border walls -->
+      <geom name="sandbox_wall_n" type="box" pos="0 1.65 0.15" size="1.7 0.08 0.15" rgba="0.72 0.45 0.20 1"/>
+      <geom name="sandbox_wall_s" type="box" pos="0 -1.65 0.15" size="1.7 0.08 0.15" rgba="0.72 0.45 0.20 1"/>
+      <geom name="sandbox_wall_e" type="box" pos="1.65 0 0.15" size="0.08 1.7 0.15" rgba="0.72 0.45 0.20 1"/>
+      <geom name="sandbox_wall_w" type="box" pos="-1.65 0 0.15" size="0.08 1.7 0.15" rgba="0.72 0.45 0.20 1"/>
+    </body>
+
+    <!-- Slide (static) -->
+    <body name="slide" pos="-4 2 0">
+      <!-- support platform -->
+      <geom name="slide_platform" type="box" pos="0 0 0.6" size="0.8 0.5 0.05" rgba="0.70 0.70 0.75 1"/>
+      <!-- ladder (simple) -->
+      <geom name="slide_ladder_left" type="capsule" fromto="-0.7 -0.4 0.05  -0.7 -0.4 0.6" size="0.03" rgba="0.6 0.6 0.65 1"/>
+      <geom name="slide_ladder_right" type="capsule" fromto="-0.7 0.4 0.05  -0.7 0.4 0.6" size="0.03" rgba="0.6 0.6 0.65 1"/>
+      <geom name="slide_rung1" type="capsule" fromto="-0.7 -0.4 0.15  -0.7 0.4 0.15" size="0.02" rgba="0.6 0.6 0.65 1"/>
+      <geom name="slide_rung2" type="capsule" fromto="-0.7 -0.4 0.28  -0.7 0.4 0.28" size="0.02" rgba="0.6 0.6 0.65 1"/>
+      <geom name="slide_rung3" type="capsule" fromto="-0.7 -0.4 0.41  -0.7 0.4 0.41" size="0.02" rgba="0.6 0.6 0.65 1"/>
+      <geom name="slide_rung4" type="capsule" fromto="-0.7 -0.4 0.54  -0.7 0.4 0.54" size="0.02" rgba="0.6 0.6 0.65 1"/>
+
+      <!-- slide ramp (tilted box) -->
+      <geom name="slide_ramp" type="box" pos="0.9 0 0.35" size="1.4 0.45 0.04" euler="0 20 0" rgba="0.95 0.25 0.25 1" friction="0.6 0.01 0.001"/>
+      <!-- side rails -->
+      <geom name="slide_rail_left" type="box" pos="0.9 -0.48 0.38" size="1.4 0.03 0.10" euler="0 20 0" rgba="0.90 0.15 0.15 1"/>
+      <geom name="slide_rail_right" type="box" pos="0.9 0.48 0.38" size="1.4 0.03 0.10" euler="0 20 0" rgba="0.90 0.15 0.15 1"/>
+
+      <!-- legs -->
+      <geom name="slide_leg1" type="capsule" fromto="-0.6 -0.45 0  -0.6 -0.45 0.6" size="0.04" rgba="0.25 0.25 0.30 1"/>
+      <geom name="slide_leg2" type="capsule" fromto="-0.6 0.45 0  -0.6 0.45 0.6" size="0.04" rgba="0.25 0.25 0.30 1"/>
+      <geom name="slide_leg3" type="capsule" fromto="0.6 -0.45 0  0.6 -0.45 0.6" size="0.04" rgba="0.25 0.25 0.30 1"/>
+      <geom name="slide_leg4" type="capsule" fromto="0.6 0.45 0  0.6 0.45 0.6" size="0.04" rgba="0.25 0.25 0.30 1"/>
+    </body>
+
+    <!-- Swing set (static frame + dynamic seats) -->
+    <body name="swing_set" pos="-4 -3 0">
+      <!-- A-frame legs -->
+      <geom name="swing_leg1" type="capsule" fromto="-1.2 -0.9 0  -0.3 -0.4 1.6" size="0.05" rgba="0.2 0.2 0.25 1"/>
+      <geom name="swing_leg2" type="capsule" fromto="-1.2 0.9 0  -0.3 0.4 1.6" size="0.05" rgba="0.2 0.2 0.25 1"/>
+      <geom name="swing_leg3" type="capsule" fromto="1.2 -0.9 0  0.3 -0.4 1.6" size="0.05" rgba="0.2 0.2 0.25 1"/>
+      <geom name="swing_leg4" type="capsule" fromto="1.2 0.9 0  0.3 0.4 1.6" size="0.05" rgba="0.2 0.2 0.25 1"/>
+
+      <!-- top bar -->
+      <geom name="swing_top" type="capsule" fromto="-0.4 0 1.65  0.4 0 1.65" size="0.06" rgba="0.25 0.25 0.30 1"/>
+
+      <!-- left swing: hinges + seat -->
+      <body name="swing_left_hanger" pos="-0.2 -0.4 1.65">
+        <joint name="swing_left_hinge" type="hinge" axis="0 1 0" limited="true" range="-60 60" damping="0.5"/>
+        <geom name="swing_left_chain" type="capsule" fromto="0 0 0   0 0 -0.9" size="0.01" rgba="0.75 0.75 0.78 1"/>
+        <body name="swing_left_seat" pos="0 0 -0.95">
+          <geom name="swing_left_seat_geom" type="box" pos="0 0 0" size="0.18 0.12 0.03" rgba="0.10 0.30 0.95 1" friction="1 0.02 0.001"/>
+        </body>
+      </body>
+
+      <!-- right swing -->
+      <body name="swing_right_hanger" pos="0.2 0.4 1.65">
+        <joint name="swing_right_hinge" type="hinge" axis="0 1 0" limited="true" range="-60 60" damping="0.5"/>
+        <geom name="swing_right_chain" type="capsule" fromto="0 0 0   0 0 -0.9" size="0.01" rgba="0.75 0.75 0.78 1"/>
+        <body name="swing_right_seat" pos="0 0 -0.95">
+          <geom name="swing_right_seat_geom" type="box" pos="0 0 0" size="0.18 0.12 0.03" rgba="0.95 0.65 0.10 1" friction="1 0.02 0.001"/>
+        </body>
+      </body>
+    </body>
+
+    <!-- Seesaw (static base + moving plank) -->
+    <body name="seesaw" pos="0 -4 0">
+      <geom name="seesaw_base" type="cylinder" pos="0 0 0.12" size="0.25 0.12" rgba="0.35 0.20 0.10 1"/>
+      <body name="seesaw_plank" pos="0 0 0.25">
+        <joint name="seesaw_hinge" type="hinge" axis="0 1 0" limited="true" range="-25 25" damping="1"/>
+        <geom name="seesaw_plank_geom" type="box" pos="0 0 0" size="1.6 0.15 0.05" rgba="0.95 0.35 0.10 1" friction="1.2 0.02 0.001"/>
+        <geom name="seesaw_handle_left" type="capsule" fromto="-1.45 0 0.12  -1.45 0 0.35" size="0.03" rgba="0.15 0.15 0.15 1"/>
+        <geom name="seesaw_handle_right" type="capsule" fromto="1.45 0 0.12  1.45 0 0.35" size="0.03" rgba="0.15 0.15 0.15 1"/>
+      </body>
+    </body>
+
+    <!-- Toy chest (static) -->
+    <body name="toy_chest" pos="2 -2 0">
+      <geom name="toy_chest_base" type="box" pos="0 0 0.2" size="0.6 0.35 0.2" rgba="0.55 0.30 0.12 1" friction="1 0.02 0.001"/>
+      <geom name="toy_chest_lid" type="box" pos="0 0 0.43" size="0.62 0.37 0.03" rgba="0.65 0.38 0.16 1"/>
+    </body>
+
+    <!-- Moving toys: balls, blocks, toy car, teddy-like shape -->
+    <body name="ball_red" pos="2.6 -2.0 0.6">
+      <freejoint name="ball_red_free"/>
+      <geom name="ball_red_geom" type="sphere" size="0.12" rgba="0.95 0.15 0.15 1" friction="0.9 0.01 0.001" density="300"/>
+    </body>
+
+    <body name="ball_blue" pos="2.2 -1.6 0.6">
+      <freejoint name="ball_blue_free"/>
+      <geom name="ball_blue_geom" type="sphere" size="0.10" rgba="0.15 0.35 0.95 1" friction="0.9 0.01 0.001" density="300"/>
+    </body>
+
+    <body name="ball_yellow" pos="1.8 -2.4 0.6">
+      <freejoint name="ball_yellow_free"/>
+      <geom name="ball_yellow_geom" type="sphere" size="0.11" rgba="0.95 0.85 0.15 1" friction="0.9 0.01 0.001" density="300"/>
+    </body>
+
+    <body name="block_green" pos="3.0 -1.7 0.55">
+      <freejoint name="block_green_free"/>
+      <geom name="block_green_geom" type="box" size="0.08 0.08 0.08" rgba="0.20 0.85 0.25 1" friction="1.1 0.02 0.001" density="500"/>
+    </body>
+
+    <body name="block_purple" pos="2.7 -2.5 0.55">
+      <freejoint name="block_purple_free"/>
+      <geom name="block_purple_geom" type="box" size="0.07 0.10 0.06" rgba="0.60 0.20 0.85 1" friction="1.1 0.02 0.001" density="500"/>
+    </body>
+
+    <body name="block_orange" pos="2.1 -2.2 0.55">
+      <freejoint name="block_orange_free"/>
+      <geom name="block_orange_geom" type="box" size="0.10 0.06 0.06" rgba="0.95 0.55 0.15 1" friction="1.1 0.02 0.001" density="500"/>
+    </body>
+
+    <!-- Toy car (simple composite) -->
+    <body name="toy_car" pos="1.2 -1.6 0.55">
+      <freejoint name="toy_car_free"/>
+      <geom name="toy_car_body" type="box" pos="0 0 0.06" size="0.18 0.10 0.06" rgba="0.10 0.85 0.85 1" friction="1.2 0.02 0.001" density="400"/>
+      <geom name="toy_car_cabin" type="box" pos="0.03 0 0.12" size="0.09 0.08 0.05" rgba="0.05 0.65 0.65 1" density="250"/>
+      <geom name="toy_car_wheel_fl" type="cylinder" pos="0.12 0.11 0.03" size="0.04 0.02" euler="90 0 0" rgba="0.12 0.12 0.12 1" friction="2 0.02 0.001" density="300"/>
+      <geom name="toy_car_wheel_fr" type="cylinder" pos="0.12 -0.11 0.03" size="0.04 0.02" euler="90 0 0" rgba="0.12 0.12 0.12 1" friction="2 0.02 0.001" density="300"/>
+      <geom name="toy_car_wheel_rl" type="cylinder" pos="-0.12 0.11 0.03" size="0.04 0.02" euler="90 0 0" rgba="0.12 0.12 0.12 1" friction="2 0.02 0.001" density="300"/>
+      <geom name="toy_car_wheel_rr" type="cylinder" pos="-0.12 -0.11 0.03" size="0.04 0.02" euler="90 0 0" rgba="0.12 0.12 0.12 1" friction="2 0.02 0.001" density="300"/>
+    </body>
+
+    <!-- Teddy bear-like toy (capsules/spheres) -->
+    <body name="teddy" pos="3.6 -2.2 0.65">
+      <freejoint name="teddy_free"/>
+      <geom name="teddy_body" type="sphere" pos="0 0 0.08" size="0.12" rgba="0.70 0.50 0.30 1" density="200" friction="1 0.02 0.001"/>
+      <geom name="teddy_head" type="sphere" pos="0 0 0.25" size="0.09" rgba="0.72 0.52 0.32 1" density="200"/>
+      <geom name="teddy_ear_l" type="sphere" pos="0.06 0.06 0.32" size="0.03" rgba="0.72 0.52 0.32 1" density="150"/>
+      <geom name="teddy_ear_r" type="sphere" pos="0.06 -0.06 0.32" size="0.03" rgba="0.72 0.52 0.32 1" density="150"/>
+      <geom name="teddy_arm_l" type="capsule" fromto="0 0.10 0.14  0.10 0.22 0.12" size="0.03" rgba="0.68 0.48 0.28 1" density="180"/>
+      <geom name="teddy_arm_r" type="capsule" fromto="0 -0.10 0.14  0.10 -0.22 0.12" size="0.03" rgba="0.68 0.48 0.28 1" density="180"/>
+      <geom name="teddy_leg_l" type="capsule" fromto="0.02 0.06 0.02  0.10 0.10 -0.08" size="0.035" rgba="0.68 0.48 0.28 1" density="220"/>
+      <geom name="teddy_leg_r" type="capsule" fromto="0.02 -0.06 0.02  0.10 -0.10 -0.08" size="0.035" rgba="0.68 0.48 0.28 1" density="220"/>
+    </body>
+
+    <!-- Small toy bucket (open top approximated by thin walls; moving) -->
+    <body name="toy_bucket" pos="3.2 3.1 0.65">
+      <freejoint name="toy_bucket_free"/>
+      <geom name="bucket_bottom" type="cylinder" pos="0 0 0.03" size="0.12 0.03" rgba="0.95 0.25 0.85 1" density="250" friction="1 0.02 0.001"/>
+      <geom name="bucket_wall1" type="box" pos="0.12 0 0.12" size="0.01 0.12 0.09" rgba="0.90 0.20 0.80 1" density="200"/>
+      <geom name="bucket_wall2" type="box" pos="-0.12 0 0.12" size="0.01 0.12 0.09" rgba="0.90 0.20 0.80 1" density="200"/>
+      <geom name="bucket_wall3" type="box" pos="0 0.12 0.12" size="0.12 0.01 0.09" rgba="0.90 0.20 0.80 1" density="200"/>
+      <geom name="bucket_wall4" type="box" pos="0 -0.12 0.12" size="0.12 0.01 0.09" rgba="0.90 0.20 0.80 1" density="200"/>
+      <geom name="bucket_handle" type="capsule" fromto="-0.10 0 0.22  0.10 0 0.22" size="0.01" rgba="0.75 0.75 0.78 1" density="150"/>
+    </body>
+
+    <!-- A few scattered "sand" pebbles (moving small spheres) -->
+    <body name="pebble1" pos="3.3 3.3 0.35">
+      <freejoint name="pebble1_free"/>
+      <geom name="pebble1_geom" type="sphere" size="0.03" rgba="0.85 0.78 0.55 1" density="800" friction="1.2 0.02 0.001"/>
+    </body>
+    <body name="pebble2" pos="2.9 2.7 0.35">
+      <freejoint name="pebble2_free"/>
+      <geom name="pebble2_geom" type="sphere" size="0.028" rgba="0.88 0.80 0.58 1" density="800" friction="1.2 0.02 0.001"/>
+    </body>
+    <body name="pebble3" pos="3.7 2.9 0.35">
+      <freejoint name="pebble3_free"/>
+      <geom name="pebble3_geom" type="sphere" size="0.026" rgba="0.82 0.76 0.55 1" density="800" friction="1.2 0.02 0.001"/>
+    </body>
+
+    <!-- Perimeter colorful fence posts (static) -->
+    <body name="fence" pos="0 0 0">
+      <!-- north line -->
+      <geom name="fence_n1" type="box" pos="-6 6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.35 0.10 1"/>
+      <geom name="fence_n2" type="box" pos="-4 6 0.35" size="0.08 0.08 0.35" rgba="0.20 0.85 0.25 1"/>
+      <geom name="fence_n3" type="box" pos="-2 6 0.35" size="0.08 0.08 0.35" rgba="0.15 0.35 0.95 1"/>
+      <geom name="fence_n4" type="box" pos="0 6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.85 0.15 1"/>
+      <geom name="fence_n5" type="box" pos="2 6 0.35" size="0.08 0.08 0.35" rgba="0.60 0.20 0.85 1"/>
+      <geom name="fence_n6" type="box" pos="4 6 0.35" size="0.08 0.08 0.35" rgba="0.10 0.85 0.85 1"/>
+      <geom name="fence_n7" type="box" pos="6 6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.25 0.25 1"/>
+
+      <!-- south line -->
+      <geom name="fence_s1" type="box" pos="-6 -6 0.35" size="0.08 0.08 0.35" rgba="0.10 0.85 0.85 1"/>
+      <geom name="fence_s2" type="box" pos="-4 -6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.85 0.15 1"/>
+      <geom name="fence_s3" type="box" pos="-2 -6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.35 0.10 1"/>
+      <geom name="fence_s4" type="box" pos="0 -6 0.35" size="0.08 0.08 0.35" rgba="0.15 0.35 0.95 1"/>
+      <geom name="fence_s5" type="box" pos="2 -6 0.35" size="0.08 0.08 0.35" rgba="0.20 0.85 0.25 1"/>
+      <geom name="fence_s6" type="box" pos="4 -6 0.35" size="0.08 0.08 0.35" rgba="0.60 0.20 0.85 1"/>
+      <geom name="fence_s7" type="box" pos="6 -6 0.35" size="0.08 0.08 0.35" rgba="0.95 0.25 0.25 1"/>
+
+      <!-- west line -->
+      <geom name="fence_w1" type="box" pos="-6 -4 0.35" size="0.08 0.08 0.35" rgba="0.95 0.85 0.15 1"/>
+      <geom name="fence_w2" type="box" pos="-6 -2 0.35" size="0.08 0.08 0.35" rgba="0.95 0.35 0.10 1"/>
+      <geom name="fence_w3" type="box" pos="-6 0 0.35" size="0.08 0.08 0.35" rgba="0.20 0.85 0.25 1"/>
+      <geom name="fence_w4" type="box" pos="-6 2 0.35" size="0.08 0.08 0.35" rgba="0.15 0.35 0.95 1"/>
+      <geom name="fence_w5" type="box" pos="-6 4 0.35" size="0.08 0.08 0.35" rgba="0.60 0.20 0.85 1"/>
+
+      <!-- east line -->
+      <geom name="fence_e1" type="box" pos="6 -4 0.35" size="0.08 0.08 0.35" rgba="0.20 0.85 0.25 1"/>
+      <geom name="fence_e2" type="box" pos="6 -2 0.35" size="0.08 0.08 0.35" rgba="0.15 0.35 0.95 1"/>
+      <geom name="fence_e3" type="box" pos="6 0 0.35" size="0.08 0.08 0.35" rgba="0.95 0.85 0.15 1"/>
+      <geom name="fence_e4" type="box" pos="6 2 0.35" size="0.08 0.08 0.35" rgba="0.95 0.35 0.10 1"/>
+      <geom name="fence_e5" type="box" pos="6 4 0.35" size="0.08 0.08 0.35" rgba="0.60 0.20 0.85 1"/>
+
+      <!-- simple rails -->
+      <geom name="fence_rail_n" type="box" pos="0 6 0.6" size="6.2 0.03 0.03" rgba="0.85 0.85 0.85 1"/>
+      <geom name="fence_rail_s" type="box" pos="0 -6 0.6" size="6.2 0.03 0.03" rgba="0.85 0.85 0.85 1"/>
+      <geom name="fence_rail_w" type="box" pos="-6 0 0.6" size="0.03 6.2 0.03" rgba="0.85 0.85 0.85 1"/>
+      <geom name="fence_rail_e" type="box" pos="6 0 0.6" size="0.03 6.2 0.03" rgba="0.85 0.85 0.85 1"/>
+    </body>
+
+    <!-- Lighting -->
+    <light name="sun" pos="0 0 8" dir="0 0 -1" directional="true" diffuse="0.9 0.9 0.9" specular="0.1 0.1 0.1"/>
+    <light name="fill" pos="5 -5 4" dir="-1 1 -1" directional="true" diffuse="0.35 0.35 0.35" specular="0 0 0"/>
+  </worldbody>
+</mujoco>

@@ -1,0 +1,210 @@
+<mujoco model="gym_scene">
+  <compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+
+  <worldbody>
+    <!-- Lighting -->
+    <light name="main_light" pos="0 0 6" dir="0 0 -1" diffuse="1 1 1" specular="0.2 0.2 0.2"/>
+    <light name="fill_light" pos="4 4 4" dir="-1 -1 -1" diffuse="0.6 0.6 0.6" specular="0.1 0.1 0.1"/>
+
+    <!-- Floor -->
+    <geom name="floor" type="plane" pos="0 0 0" size="20 20 0.1" rgba="0.18 0.18 0.20 1" friction="1.2 0.8 0.01"/>
+
+    <!-- Walls (simple perimeter) -->
+    <geom name="wall_n" type="box" pos="0 18 1.5" size="20 0.2 1.5" rgba="0.85 0.85 0.88 1" contype="1" conaffinity="1"/>
+    <geom name="wall_s" type="box" pos="0 -18 1.5" size="20 0.2 1.5" rgba="0.85 0.85 0.88 1" contype="1" conaffinity="1"/>
+    <geom name="wall_e" type="box" pos="18 0 1.5" size="0.2 20 1.5" rgba="0.85 0.85 0.88 1" contype="1" conaffinity="1"/>
+    <geom name="wall_w" type="box" pos="-18 0 1.5" size="0.2 20 1.5" rgba="0.85 0.85 0.88 1" contype="1" conaffinity="1"/>
+
+    <!-- Rubber mat area -->
+    <geom name="mat_strip" type="box" pos="0 0 0.01" size="6 12 0.01" rgba="0.10 0.10 0.10 1" friction="1.4 1.0 0.02"/>
+
+    <!-- ========================= -->
+    <!-- Equipment: Power Rack     -->
+    <!-- ========================= -->
+    <body name="power_rack" pos="-8 6 0">
+      <!-- Uprights -->
+      <geom name="rack_upright_fl" type="box" pos="0.9 0.6 1.2" size="0.05 0.05 1.2" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_upright_fr" type="box" pos="0.9 -0.6 1.2" size="0.05 0.05 1.2" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_upright_bl" type="box" pos="-0.9 0.6 1.2" size="0.05 0.05 1.2" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_upright_br" type="box" pos="-0.9 -0.6 1.2" size="0.05 0.05 1.2" rgba="0.10 0.10 0.12 1"/>
+
+      <!-- Top frame -->
+      <geom name="rack_top_l" type="box" pos="0 0.6 2.35" size="0.95 0.05 0.05" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_top_r" type="box" pos="0 -0.6 2.35" size="0.95 0.05 0.05" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_top_f" type="box" pos="0.9 0 2.35" size="0.05 0.65 0.05" rgba="0.10 0.10 0.12 1"/>
+      <geom name="rack_top_b" type="box" pos="-0.9 0 2.35" size="0.05 0.65 0.05" rgba="0.10 0.10 0.12 1"/>
+
+      <!-- Base feet -->
+      <geom name="rack_base_f" type="box" pos="0.9 0 0.05" size="0.06 0.75 0.05" rgba="0.08 0.08 0.10 1"/>
+      <geom name="rack_base_b" type="box" pos="-0.9 0 0.05" size="0.06 0.75 0.05" rgba="0.08 0.08 0.10 1"/>
+      <geom name="rack_base_l" type="box" pos="0 0.6 0.05" size="0.95 0.06 0.05" rgba="0.08 0.08 0.10 1"/>
+      <geom name="rack_base_r" type="box" pos="0 -0.6 0.05" size="0.95 0.06 0.05" rgba="0.08 0.08 0.10 1"/>
+    </body>
+
+    <!-- Barbell (movable) -->
+    <body name="barbell" pos="-8 6 1.35">
+      <freejoint name="barbell_free"/>
+      <geom name="bar_shaft" type="cylinder" pos="0 0 0" size="0.014 1.1" rgba="0.75 0.75 0.78 1" friction="0.8 0.2 0.01"/>
+      <!-- Plates -->
+      <geom name="plate_l_outer" type="cylinder" pos="0 1.05 0" size="0.22 0.03" rgba="0.06 0.06 0.06 1"/>
+      <geom name="plate_l_inner" type="cylinder" pos="0 0.98 0" size="0.18 0.025" rgba="0.10 0.10 0.10 1"/>
+      <geom name="plate_r_outer" type="cylinder" pos="0 -1.05 0" size="0.22 0.03" rgba="0.06 0.06 0.06 1"/>
+      <geom name="plate_r_inner" type="cylinder" pos="0 -0.98 0" size="0.18 0.025" rgba="0.10 0.10 0.10 1"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Bench Press Station       -->
+    <!-- ========================= -->
+    <body name="bench_press" pos="-8 0 0">
+      <!-- Bench base -->
+      <geom name="bench_base" type="box" pos="0 0 0.06" size="0.65 0.35 0.06" rgba="0.12 0.12 0.14 1"/>
+      <!-- Legs -->
+      <geom name="bench_leg_f" type="box" pos="0.45 0 0.20" size="0.05 0.25 0.20" rgba="0.10 0.10 0.12 1"/>
+      <geom name="bench_leg_b" type="box" pos="-0.45 0 0.20" size="0.05 0.25 0.20" rgba="0.10 0.10 0.12 1"/>
+      <!-- Pad -->
+      <geom name="bench_pad" type="box" pos="0 0 0.42" size="0.70 0.16 0.05" rgba="0.55 0.10 0.10 1"/>
+      <!-- Simple uprights -->
+      <geom name="bench_upright_l" type="box" pos="0.55 0.28 0.85" size="0.03 0.03 0.45" rgba="0.10 0.10 0.12 1"/>
+      <geom name="bench_upright_r" type="box" pos="0.55 -0.28 0.85" size="0.03 0.03 0.45" rgba="0.10 0.10 0.12 1"/>
+      <geom name="bench_crossbar" type="box" pos="0.55 0 1.28" size="0.03 0.30 0.03" rgba="0.10 0.10 0.12 1"/>
+    </body>
+
+    <!-- Dumbbell rack -->
+    <body name="dumbbell_rack" pos="6 8 0">
+      <geom name="db_rack_frame" type="box" pos="0 0 0.45" size="1.6 0.35 0.05" rgba="0.12 0.12 0.14 1"/>
+      <geom name="db_rack_frame2" type="box" pos="0 0 0.85" size="1.6 0.35 0.05" rgba="0.12 0.12 0.14 1"/>
+      <geom name="db_rack_leg_fl" type="box" pos="1.45 0.25 0.25" size="0.05 0.05 0.25" rgba="0.10 0.10 0.12 1"/>
+      <geom name="db_rack_leg_fr" type="box" pos="1.45 -0.25 0.25" size="0.05 0.05 0.25" rgba="0.10 0.10 0.12 1"/>
+      <geom name="db_rack_leg_bl" type="box" pos="-1.45 0.25 0.25" size="0.05 0.05 0.25" rgba="0.10 0.10 0.12 1"/>
+      <geom name="db_rack_leg_br" type="box" pos="-1.45 -0.25 0.25" size="0.05 0.05 0.25" rgba="0.10 0.10 0.12 1"/>
+    </body>
+
+    <!-- A few dumbbells (movable) -->
+    <body name="dumbbell_1" pos="6 8 0.95">
+      <freejoint name="dumbbell_1_free"/>
+      <geom name="db1_handle" type="cylinder" pos="0 0 0" size="0.015 0.12" rgba="0.70 0.70 0.72 1"/>
+      <geom name="db1_head_l" type="cylinder" pos="0 0.14 0" size="0.06 0.05" rgba="0.05 0.05 0.05 1"/>
+      <geom name="db1_head_r" type="cylinder" pos="0 -0.14 0" size="0.06 0.05" rgba="0.05 0.05 0.05 1"/>
+    </body>
+
+    <body name="dumbbell_2" pos="6.3 8 0.55">
+      <freejoint name="dumbbell_2_free"/>
+      <geom name="db2_handle" type="cylinder" pos="0 0 0" size="0.015 0.12" rgba="0.70 0.70 0.72 1"/>
+      <geom name="db2_head_l" type="cylinder" pos="0 0.14 0" size="0.07 0.06" rgba="0.06 0.06 0.06 1"/>
+      <geom name="db2_head_r" type="cylinder" pos="0 -0.14 0" size="0.07 0.06" rgba="0.06 0.06 0.06 1"/>
+    </body>
+
+    <body name="dumbbell_3" pos="5.7 8 0.55">
+      <freejoint name="dumbbell_3_free"/>
+      <geom name="db3_handle" type="cylinder" pos="0 0 0" size="0.015 0.12" rgba="0.70 0.70 0.72 1"/>
+      <geom name="db3_head_l" type="cylinder" pos="0 0.14 0" size="0.05 0.04" rgba="0.06 0.06 0.06 1"/>
+      <geom name="db3_head_r" type="cylinder" pos="0 -0.14 0" size="0.05 0.04" rgba="0.06 0.06 0.06 1"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Kettlebells (movable)     -->
+    <!-- ========================= -->
+    <body name="kettlebell_1" pos="3 6 0.12">
+      <freejoint name="kb1_free"/>
+      <geom name="kb1_ball" type="sphere" pos="0 0 0.09" size="0.09" rgba="0.12 0.12 0.12 1"/>
+      <geom name="kb1_handle" type="capsule" pos="0 0 0.18" size="0.02 0.07" rgba="0.20 0.20 0.20 1"/>
+    </body>
+
+    <body name="kettlebell_2" pos="3.4 6.2 0.15">
+      <freejoint name="kb2_free"/>
+      <geom name="kb2_ball" type="sphere" pos="0 0 0.10" size="0.10" rgba="0.15 0.15 0.15 1"/>
+      <geom name="kb2_handle" type="capsule" pos="0 0 0.20" size="0.02 0.08" rgba="0.22 0.22 0.22 1"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Plyo Boxes (stack)        -->
+    <!-- ========================= -->
+    <body name="plyo_box_big" pos="2 -6 0.25">
+      <geom name="plyo_big" type="box" pos="0 0 0.25" size="0.6 0.5 0.25" rgba="0.65 0.45 0.20 1" friction="1.1 0.9 0.02"/>
+    </body>
+
+    <body name="plyo_box_small" pos="2.2 -6.2 0.15">
+      <geom name="plyo_small" type="box" pos="0 0 0.15" size="0.45 0.4 0.15" rgba="0.60 0.40 0.18 1" friction="1.1 0.9 0.02"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Treadmill (static)        -->
+    <!-- ========================= -->
+    <body name="treadmill" pos="10 -6 0">
+      <!-- Base platform -->
+      <geom name="tm_base" type="box" pos="0 0 0.10" size="1.2 0.55 0.10" rgba="0.12 0.12 0.14 1"/>
+      <!-- Running deck -->
+      <geom name="tm_deck" type="box" pos="-0.1 0 0.14" size="1.0 0.40 0.04" rgba="0.05 0.05 0.05 1" friction="1.3 0.9 0.02"/>
+      <!-- Console post -->
+      <geom name="tm_post" type="box" pos="0.95 0 0.75" size="0.06 0.20 0.65" rgba="0.12 0.12 0.14 1"/>
+      <!-- Console -->
+      <geom name="tm_console" type="box" pos="1.05 0 1.45" size="0.18 0.35 0.12" rgba="0.20 0.20 0.22 1"/>
+      <!-- Handrails -->
+      <geom name="tm_rail_l" type="capsule" pos="0.6 0.35 1.05" size="0.03 0.55" rgba="0.15 0.15 0.16 1"/>
+      <geom name="tm_rail_r" type="capsule" pos="0.6 -0.35 1.05" size="0.03 0.55" rgba="0.15 0.15 0.16 1"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Stationary Bike (static)  -->
+    <!-- ========================= -->
+    <body name="bike" pos="10 2 0">
+      <geom name="bike_base" type="box" pos="0 0 0.08" size="0.75 0.35 0.08" rgba="0.12 0.12 0.14 1"/>
+      <geom name="bike_post" type="box" pos="-0.15 0 0.55" size="0.06 0.10 0.55" rgba="0.12 0.12 0.14 1"/>
+      <geom name="bike_seat" type="box" pos="-0.35 0 1.00" size="0.18 0.12 0.06" rgba="0.25 0.25 0.27 1"/>
+      <geom name="bike_handle_post" type="box" pos="0.30 0 0.75" size="0.06 0.10 0.75" rgba="0.12 0.12 0.14 1"/>
+      <geom name="bike_handlebar" type="capsule" pos="0.40 0 1.40" size="0.03 0.28" rgba="0.18 0.18 0.20 1"/>
+      <geom name="bike_flywheel" type="cylinder" pos="0.35 0 0.25" size="0.20 0.08" rgba="0.08 0.08 0.08 1"/>
+    </body>
+
+    <!-- ========================= -->
+    <!-- Cable Machine (static)    -->
+    <!-- ========================= -->
+    <body name="cable_machine" pos="8 10 0">
+      <geom name="cm_upright_l" type="box" pos="0 0.6 1.3" size="0.08 0.08 1.3" rgba="0.10 0.10 0.12 1"/>
+      <geom name="cm_upright_r" type="box" pos="0 -0.6 1.3" size="0.08 0.08 1.3" rgba="0.10 0.10 0.12 1"/>
+      <geom name="cm_top" type="box" pos="0 0 2.55" size="0.10 0.70 0.07" rgba="0.10 0.10 0.12 1"/>
+      <geom name="cm_base" type="box" pos="0 0 0.08" size="0.80 0.75 0.08" rgba="0.12 0.12 0.14 1"/>
+      <!-- Weight stack block -->
+      <geom name="cm_stack" type="box" pos="0 0 0.75" size="0.20 0.25 0.65" rgba="0.05 0.05 0.05 1"/>
+    </body>
+
+    <!-- Medicine balls (movable) -->
+    <body name="med_ball_1" pos="0 10 0.20">
+      <freejoint name="med_ball_1_free"/>
+      <geom name="mb1" type="sphere" pos="0 0 0" size="0.12" rgba="0.15 0.35 0.80 1" friction="1.0 0.8 0.02"/>
+    </body>
+
+    <body name="med_ball_2" pos="0.4 10.3 0.18">
+      <freejoint name="med_ball_2_free"/>
+      <geom name="mb2" type="sphere" pos="0 0 0" size="0.10" rgba="0.80 0.25 0.15 1" friction="1.0 0.8 0.02"/>
+    </body>
+
+    <!-- Yoga mats (static thin boxes) -->
+    <body name="yoga_mats" pos="-2 -10 0">
+      <geom name="mat1" type="box" pos="0 0 0.01" size="1.0 0.30 0.01" rgba="0.20 0.60 0.30 1" friction="1.2 0.9 0.02"/>
+      <geom name="mat2" type="box" pos="0 -0.8 0.01" size="1.0 0.30 0.01" rgba="0.60 0.30 0.70 1" friction="1.2 0.9 0.02"/>
+      <geom name="mat3" type="box" pos="0 0.8 0.01" size="1.0 0.30 0.01" rgba="0.25 0.45 0.70 1" friction="1.2 0.9 0.02"/>
+    </body>
+
+    <!-- Mirror panel (decorative: thin box) -->
+    <geom name="mirror_panel" type="box" pos="0 -17.6 1.3" size="8 0.03 1.2" rgba="0.75 0.80 0.85 0.35" contype="0" conaffinity="0"/>
+
+    <!-- A few movable bumper plates on the ground -->
+    <body name="bumper_plate_1" pos="-4 2 0.05">
+      <freejoint name="bp1_free"/>
+      <geom name="bp1" type="cylinder" pos="0 0 0" size="0.22 0.03" rgba="0.05 0.05 0.05 1" friction="1.0 0.8 0.02"/>
+    </body>
+
+    <body name="bumper_plate_2" pos="-4.5 2.3 0.05">
+      <freejoint name="bp2_free"/>
+      <geom name="bp2" type="cylinder" pos="0 0 0" size="0.18 0.025" rgba="0.08 0.08 0.08 1" friction="1.0 0.8 0.02"/>
+    </body>
+
+    <!-- Simple clock on wall (static) -->
+    <body name="wall_clock" pos="0 17.7 2.5">
+      <geom name="clock_face" type="cylinder" pos="0 0 0" size="0.35 0.02" rgba="0.95 0.95 0.95 1" contype="0" conaffinity="0"/>
+      <geom name="clock_rim" type="cylinder" pos="0 0 0" size="0.38 0.015" rgba="0.10 0.10 0.12 1" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+</mujoco>

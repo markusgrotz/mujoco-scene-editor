@@ -1,0 +1,231 @@
+<mujoco model="cluttered_workbench">
+  <compiler angle="degree" coordinate="local"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <size njmax="2000" nconmax="500"/>
+  <visual>
+    <headlight diffuse="0.7 0.7 0.7" ambient="0.25 0.25 0.25" specular="0.2 0.2 0.2"/>
+    <rgba haze="0 0 0 0"/>
+  </visual>
+
+  <asset>
+    <!-- No textures/materials per guidelines -->
+  </asset>
+
+  <worldbody>
+    <!-- Ground -->
+    <geom name="ground" type="plane" pos="0 0 0" size="5 5 0.1"
+          rgba="0.92 0.92 0.92 1" friction="1 0.01 0.001"/>
+
+    <!-- Workbench: tabletop and legs -->
+    <body name="bench" pos="0 0 0">
+      <!-- Tabletop -->
+      <geom name="tabletop" type="box" pos="0 0 0.9" size="0.9 0.55 0.04"
+            rgba="0.55 0.36 0.20 1" friction="1.2 0.01 0.001"/>
+
+      <!-- Apron/frame -->
+      <geom name="apron_front" type="box" pos="0 0.53 0.82" size="0.9 0.02 0.04"
+            rgba="0.25 0.25 0.27 1"/>
+      <geom name="apron_back" type="box" pos="0 -0.53 0.82" size="0.9 0.02 0.04"
+            rgba="0.25 0.25 0.27 1"/>
+      <geom name="apron_left" type="box" pos="-0.88 0 0.82" size="0.02 0.55 0.04"
+            rgba="0.25 0.25 0.27 1"/>
+      <geom name="apron_right" type="box" pos="0.88 0 0.82" size="0.02 0.55 0.04"
+            rgba="0.25 0.25 0.27 1"/>
+
+      <!-- Legs -->
+      <geom name="leg_fl" type="box" pos="-0.82 0.48 0.45" size="0.04 0.04 0.45"
+            rgba="0.20 0.20 0.22 1"/>
+      <geom name="leg_fr" type="box" pos="0.82 0.48 0.45" size="0.04 0.04 0.45"
+            rgba="0.20 0.20 0.22 1"/>
+      <geom name="leg_bl" type="box" pos="-0.82 -0.48 0.45" size="0.04 0.04 0.45"
+            rgba="0.20 0.20 0.22 1"/>
+      <geom name="leg_br" type="box" pos="0.82 -0.48 0.45" size="0.04 0.04 0.45"
+            rgba="0.20 0.20 0.22 1"/>
+
+      <!-- Lower shelf -->
+      <geom name="shelf" type="box" pos="0 0 0.35" size="0.75 0.45 0.02"
+            rgba="0.45 0.30 0.18 1" friction="1.1 0.01 0.001"/>
+
+      <!-- Backboard / small wall behind bench -->
+      <geom name="backboard" type="box" pos="0 -0.62 1.25" size="0.95 0.02 0.45"
+            rgba="0.75 0.75 0.78 1"/>
+
+      <!-- Pegboard holes implied; no textures -->
+
+      <!-- CLUTTER ON TABLETOP (all free-moving objects) -->
+
+      <!-- Hammer -->
+      <body name="hammer" pos="-0.35 0.10 0.98" quat="0.98 0.0 0.0 0.2">
+        <freejoint name="hammer_free"/>
+        <!-- Handle -->
+        <geom name="hammer_handle" type="capsule" fromto="-0.12 0 0  0.12 0 0" size="0.012"
+              rgba="0.55 0.32 0.18 1" mass="0.25" friction="1.2 0.01 0.001"/>
+        <!-- Head -->
+        <geom name="hammer_head" type="box" pos="0.145 0 0.015" size="0.04 0.02 0.02"
+              rgba="0.25 0.25 0.27 1" mass="0.5" friction="1.0 0.01 0.001"/>
+        <!-- Claw-ish end as another box -->
+        <geom name="hammer_claw" type="box" pos="0.19 0 0.015" size="0.015 0.02 0.015"
+              rgba="0.25 0.25 0.27 1" mass="0.15"/>
+      </body>
+
+      <!-- Screwdriver -->
+      <body name="screwdriver" pos="-0.10 0.25 0.965" quat="0.9659 0 0 0.2588">
+        <freejoint name="screwdriver_free"/>
+        <!-- Handle -->
+        <geom name="screwdriver_handle" type="cylinder" pos="-0.06 0 0" size="0.018 0.05"
+              rgba="0.85 0.10 0.10 1" mass="0.12" friction="1.1 0.01 0.001"/>
+        <!-- Shaft -->
+        <geom name="screwdriver_shaft" type="capsule" fromto="-0.01 0 0  0.12 0 0" size="0.006"
+              rgba="0.70 0.70 0.75 1" mass="0.08" friction="0.8 0.01 0.001"/>
+        <!-- Tip -->
+        <geom name="screwdriver_tip" type="box" pos="0.135 0 0" size="0.008 0.004 0.003"
+              rgba="0.55 0.55 0.60 1" mass="0.01"/>
+      </body>
+
+      <!-- Wrench -->
+      <body name="wrench" pos="0.05 0.05 0.965" quat="0.9239 0 0 0.3827">
+        <freejoint name="wrench_free"/>
+        <geom name="wrench_handle" type="capsule" fromto="-0.12 0 0  0.10 0 0" size="0.009"
+              rgba="0.60 0.60 0.65 1" mass="0.18" friction="0.9 0.01 0.001"/>
+        <geom name="wrench_jaw" type="box" pos="0.125 0 0.004" size="0.03 0.02 0.008"
+              rgba="0.60 0.60 0.65 1" mass="0.12"/>
+        <geom name="wrench_jaw_gap" type="box" pos="0.135 0.0 0.014" size="0.012 0.012 0.004"
+              rgba="0.35 0.35 0.38 1" mass="0.01"/>
+      </body>
+
+      <!-- Pliers -->
+      <body name="pliers" pos="0.25 0.18 0.965" quat="0.9962 0 0 0.0872">
+        <freejoint name="pliers_free"/>
+        <!-- Two handles -->
+        <geom name="pliers_handle1" type="capsule" fromto="-0.11 -0.01 0  0.00 0.00 0" size="0.010"
+              rgba="0.10 0.10 0.12 1" mass="0.10" friction="1.0 0.01 0.001"/>
+        <geom name="pliers_handle2" type="capsule" fromto="-0.11 0.01 0  0.00 0.00 0" size="0.010"
+              rgba="0.10 0.10 0.12 1" mass="0.10" friction="1.0 0.01 0.001"/>
+        <!-- Head -->
+        <geom name="pliers_head" type="box" pos="0.02 0 0.0" size="0.025 0.02 0.012"
+              rgba="0.55 0.55 0.60 1" mass="0.12" friction="0.9 0.01 0.001"/>
+        <!-- Jaws -->
+        <geom name="pliers_jaw1" type="capsule" fromto="0.04 0.006 0  0.09 0.016 0" size="0.004"
+              rgba="0.55 0.55 0.60 1" mass="0.03"/>
+        <geom name="pliers_jaw2" type="capsule" fromto="0.04 -0.006 0  0.09 -0.016 0" size="0.004"
+              rgba="0.55 0.55 0.60 1" mass="0.03"/>
+      </body>
+
+      <!-- Small parts tray -->
+      <body name="parts_tray" pos="0.35 -0.15 0.95" quat="1 0 0 0">
+        <freejoint name="parts_tray_free"/>
+        <geom name="tray_base" type="box" pos="0 0 0.01" size="0.12 0.08 0.01"
+              rgba="0.15 0.25 0.35 1" mass="0.25" friction="1.1 0.01 0.001"/>
+        <geom name="tray_wall_front" type="box" pos="0 0.08 0.03" size="0.12 0.01 0.03"
+              rgba="0.15 0.25 0.35 1" mass="0.05"/>
+        <geom name="tray_wall_back" type="box" pos="0 -0.08 0.03" size="0.12 0.01 0.03"
+              rgba="0.15 0.25 0.35 1" mass="0.05"/>
+        <geom name="tray_wall_left" type="box" pos="-0.12 0 0.03" size="0.01 0.08 0.03"
+              rgba="0.15 0.25 0.35 1" mass="0.05"/>
+        <geom name="tray_wall_right" type="box" pos="0.12 0 0.03" size="0.01 0.08 0.03"
+              rgba="0.15 0.25 0.35 1" mass="0.05"/>
+      </body>
+
+      <!-- Loose bolts (cylinders) -->
+      <body name="bolt1" pos="0.28 -0.05 0.965">
+        <freejoint name="bolt1_free"/>
+        <geom name="bolt1_shaft" type="cylinder" pos="0 0 0.01" size="0.004 0.02"
+              rgba="0.55 0.55 0.60 1" mass="0.01" friction="0.6 0.01 0.001"/>
+        <geom name="bolt1_head" type="box" pos="0 0 0.035" size="0.007 0.007 0.004"
+              rgba="0.50 0.50 0.55 1" mass="0.005"/>
+      </body>
+
+      <body name="bolt2" pos="0.32 -0.02 0.965" quat="0.99 0 0 0.14">
+        <freejoint name="bolt2_free"/>
+        <geom name="bolt2_shaft" type="cylinder" pos="0 0 0.012" size="0.004 0.018"
+              rgba="0.55 0.55 0.60 1" mass="0.01" friction="0.6 0.01 0.001"/>
+        <geom name="bolt2_head" type="box" pos="0 0 0.032" size="0.007 0.007 0.004"
+              rgba="0.50 0.50 0.55 1" mass="0.005"/>
+      </body>
+
+      <body name="nut1" pos="0.22 -0.08 0.955">
+        <freejoint name="nut1_free"/>
+        <geom name="nut1" type="cylinder" pos="0 0 0.006" size="0.008 0.006"
+              rgba="0.55 0.55 0.60 1" mass="0.006" friction="0.7 0.01 0.001"/>
+        <geom name="nut1_hole" type="cylinder" pos="0 0 0.006" size="0.004 0.006"
+              rgba="0.35 0.35 0.38 1" mass="0.001" contype="0" conaffinity="0"/>
+      </body>
+
+      <!-- Small gear (approximated as cylinder) -->
+      <body name="gear" pos="0.10 -0.18 0.955" quat="0.996 0.087 0 0">
+        <freejoint name="gear_free"/>
+        <geom name="gear_disc" type="cylinder" pos="0 0 0.008" size="0.03 0.008"
+              rgba="0.65 0.65 0.70 1" mass="0.05" friction="0.8 0.01 0.001"/>
+        <!-- Teeth hint with small boxes around (non-global) -->
+        <geom name="gear_tooth1" type="box" pos="0.034 0 0.008" size="0.006 0.004 0.008"
+              rgba="0.60 0.60 0.65 1" mass="0.003"/>
+        <geom name="gear_tooth2" type="box" pos="-0.034 0 0.008" size="0.006 0.004 0.008"
+              rgba="0.60 0.60 0.65 1" mass="0.003"/>
+        <geom name="gear_tooth3" type="box" pos="0 0.034 0.008" size="0.004 0.006 0.008"
+              rgba="0.60 0.60 0.65 1" mass="0.003"/>
+        <geom name="gear_tooth4" type="box" pos="0 -0.034 0.008" size="0.004 0.006 0.008"
+              rgba="0.60 0.60 0.65 1" mass="0.003"/>
+      </body>
+
+      <!-- Small electronic part (PCB) -->
+      <body name="pcb" pos="-0.05 -0.20 0.945" quat="0.999 0 0.04 0">
+        <freejoint name="pcb_free"/>
+        <geom name="pcb_board" type="box" pos="0 0 0.005" size="0.06 0.04 0.005"
+              rgba="0.08 0.45 0.20 1" mass="0.03" friction="1.0 0.01 0.001"/>
+        <geom name="pcb_chip" type="box" pos="0.01 0.0 0.013" size="0.012 0.010 0.006"
+              rgba="0.10 0.10 0.12 1" mass="0.01"/>
+        <geom name="pcb_cap1" type="cylinder" pos="-0.02 0.015 0.012" size="0.004 0.007"
+              rgba="0.15 0.15 0.17 1" mass="0.003"/>
+        <geom name="pcb_cap2" type="cylinder" pos="-0.03 -0.015 0.012" size="0.004 0.007"
+              rgba="0.15 0.15 0.17 1" mass="0.003"/>
+      </body>
+
+      <!-- Tape roll (torus-like approximated by two cylinders: ring + hole non-colliding) -->
+      <body name="tape_roll" pos="-0.28 -0.10 0.96" quat="0.7071 0.7071 0 0">
+        <freejoint name="tape_roll_free"/>
+        <geom name="tape_outer" type="cylinder" pos="0 0 0" size="0.035 0.015"
+              rgba="0.95 0.85 0.20 1" mass="0.04" friction="1.0 0.01 0.001"/>
+        <geom name="tape_hole" type="cylinder" pos="0 0 0" size="0.018 0.016"
+              rgba="0.75 0.75 0.78 1" mass="0.001" contype="0" conaffinity="0"/>
+      </body>
+
+      <!-- Small box of parts -->
+      <body name="parts_box" pos="0.00 -0.35 0.98" quat="0.98 0 0 0.20">
+        <freejoint name="parts_box_free"/>
+        <geom name="parts_box_base" type="box" pos="0 0 0.03" size="0.07 0.05 0.03"
+              rgba="0.85 0.85 0.88 1" mass="0.12" friction="1.1 0.01 0.001"/>
+        <geom name="parts_box_lid" type="box" pos="0 0 0.065" size="0.071 0.051 0.005"
+              rgba="0.70 0.70 0.74 1" mass="0.03"/>
+      </body>
+
+      <!-- Vise (fixed to table) -->
+      <body name="vise" pos="0.55 0.35 0.94">
+        <!-- Base clamp -->
+        <geom name="vise_base" type="box" pos="0 0 0.02" size="0.10 0.06 0.02"
+              rgba="0.20 0.30 0.35 1" friction="1.4 0.01 0.001"/>
+        <!-- Fixed jaw -->
+        <geom name="vise_jaw_fixed" type="box" pos="0.05 0 0.06" size="0.03 0.06 0.02"
+              rgba="0.18 0.28 0.32 1"/>
+        <!-- Moving jaw (kept fixed for simplicity) -->
+        <geom name="vise_jaw_move" type="box" pos="-0.02 0 0.06" size="0.03 0.06 0.02"
+              rgba="0.18 0.28 0.32 1"/>
+        <!-- Screw handle -->
+        <geom name="vise_handle" type="capsule" fromto="-0.10 0 0.06  -0.18 0 0.06" size="0.006"
+              rgba="0.55 0.55 0.60 1"/>
+      </body>
+    </body>
+
+    <!-- Simple overhead lamp (static) -->
+    <body name="lamp" pos="0 0 1.9">
+      <geom name="lamp_arm" type="capsule" fromto="0.0 -0.3 0.0  0.0 -0.6 -0.4" size="0.01"
+            rgba="0.35 0.35 0.38 1"/>
+      <geom name="lamp_head" type="box" pos="0 -0.62 -0.42" size="0.07 0.05 0.03"
+            rgba="0.35 0.35 0.38 1"/>
+      <light name="lamp_light" pos="0 -0.62 1.48" dir="0 0 -1" directional="false"
+             diffuse="1 1 1" specular="0.2 0.2 0.2" attenuation="0.6 0.0 0.0" cutoff="45"/>
+    </body>
+
+    <!-- Camera for a nice view -->
+    <camera name="main_cam" pos="1.8 1.2 1.6" xyaxes="-0.55 0.83 0  -0.35 -0.23 0.91"/>
+  </worldbody>
+</mujoco>

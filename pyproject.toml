@@ -1,0 +1,59 @@
+[project]
+name = "mujoco-scene-editor"
+version = "0.0.1"
+description = "Lightweight scene editor for mujoco"
+readme = "README.md"
+requires-python = ">=3.10,<3.13" # Python 3.9 is EOL. A dm-control dependency is unavailable for newer versions
+license = {file = "LICENSE.md"}
+keywords = ["robotics", "research", "simulation"]
+authors = [
+  { name = "Markus Grotz", email = "scene-editor@robits.ai" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta", 
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.13,<2.0.0",
+    "rich-click>=1",
+    "click-prompt>=0.6.0",
+    "robits[sim]>=0.7.2",
+    "mujoco>=3.3,<4.0",
+    "robot-descriptions>=1.14.0,<2.0",
+    "dm-control>=1.0.30,<2.0",
+    "cachier>=4.1.0",
+    "objaverse>=0.1.7",
+    "viser>=1.0.16",
+    "mink>=0.0.13",
+    "qpsolvers[quadprog]>=0.1.13",
+    "openai>=2.15.0",
+]
+
+[project.optional-dependencies]
+dev = ["sphinx", "toml", "myst-parser", "sphinx-rtd-theme", "ruff"]
+
+[project.urls]
+homepage = "https://github.com/markusgrotz/scene_editor"
+repository = "https://github.com/markusgrotz/scene_editor"
+documentation = "https://github.com/markusgrotz/scene_editor"
+tracker = "https://github.com/markusgrotz/scene_editor/issues"
+
+[build-system]
+requires = ["uv_build>=0.9.4,<0.10.0"]
+build-backend = "uv_build"
+
+[project.scripts]
+scene_editor = 'mujoco_scene_editor.cli.editor_cli:cli'
+mjedit = 'mujoco_scene_editor.cli.editor_cli:edit'
+mjprompt = 'mujoco_scene_editor.cli.editor_cli:prompt'
+mjcreate = 'mujoco_scene_editor.cli.editor_cli:new'

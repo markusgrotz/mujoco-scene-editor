@@ -1,0 +1,12 @@
+'json_data': {'messages': [
+              {'role': 'user', 'content': [
+                            {'type': 'text', 'text': "\nGenerate a                     
+                             MuJoCo 3.3.7 XML. Here are some guidelines:\n- Don't use global tags for colors or other elements\n- Don't use textures/materials. Use a color instead                            
+                             assigned to each element\n- If the scene should contain a robot try match it first to an existing description in the robot_description package                                    
+                             (https: //github.com/robot-descriptions/robot_descriptions.py). If found copy the content.\n- For moving objects add a freejoint\n- There is no geom cone                          
+                             element\n- Avoid accelerometer and sensor tags\nOutput the complete XML file. The scene is as follows:\n"}, 
+                             {'type': 'text', 'text': 'A coffee shop with a high-end espresso machine.'}
+                     ]
+              }
+       ], 'model': 'gpt-5.2'
+}

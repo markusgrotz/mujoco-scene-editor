@@ -1,0 +1,147 @@
+<mujoco model="living_room">
+  <compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <size njmax="2000" nconmax="400"/>
+  <visual>
+    <headlight ambient="0.35 0.35 0.35" diffuse="0.7 0.7 0.7" specular="0.2 0.2 0.2"/>
+    <rgba haze="0 0 0 0"/>
+  </visual>
+
+  <asset>
+    <!-- No textures/materials per instructions -->
+  </asset>
+
+  <worldbody>
+    <!-- Floor -->
+    <geom name="floor" type="plane" size="6 6 0.1" rgba="0.72 0.70 0.66 1"/>
+
+    <!-- Room boundary (low walls) -->
+    <body name="walls" pos="0 0 0">
+      <!-- Back wall (+y) -->
+      <geom name="wall_back" type="box" pos="0 5.8 1.2" size="6 0.2 1.2" rgba="0.95 0.95 0.95 1" contype="1" conaffinity="1"/>
+      <!-- Front wall (-y) -->
+      <geom name="wall_front" type="box" pos="0 -5.8 1.2" size="6 0.2 1.2" rgba="0.95 0.95 0.95 1" contype="1" conaffinity="1"/>
+      <!-- Left wall (-x) -->
+      <geom name="wall_left" type="box" pos="-5.8 0 1.2" size="0.2 6 1.2" rgba="0.96 0.96 0.96 1" contype="1" conaffinity="1"/>
+      <!-- Right wall (+x) -->
+      <geom name="wall_right" type="box" pos="5.8 0 1.2" size="0.2 6 1.2" rgba="0.96 0.96 0.96 1" contype="1" conaffinity="1"/>
+    </body>
+
+    <!-- Rug -->
+    <body name="rug" pos="0 0 0.005">
+      <geom name="rug_geom" type="box" pos="0 0 0" size="2.2 1.6 0.005" rgba="0.55 0.20 0.20 1"
+            contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Sofa -->
+    <body name="sofa" pos="-2.2 1.2 0">
+      <!-- Base -->
+      <geom name="sofa_base" type="box" pos="0 0 0.25" size="1.2 0.5 0.25" rgba="0.22 0.26 0.32 1"/>
+      <!-- Seat -->
+      <geom name="sofa_seat" type="box" pos="0 -0.05 0.55" size="1.2 0.55 0.12" rgba="0.27 0.32 0.40 1"/>
+      <!-- Back -->
+      <geom name="sofa_back" type="box" pos="0 0.45 0.85" size="1.2 0.15 0.35" rgba="0.24 0.29 0.36 1"/>
+      <!-- Arms -->
+      <geom name="sofa_arm_left" type="box" pos="-1.15 0.0 0.75" size="0.10 0.55 0.25" rgba="0.23 0.28 0.35 1"/>
+      <geom name="sofa_arm_right" type="box" pos="1.15 0.0 0.75" size="0.10 0.55 0.25" rgba="0.23 0.28 0.35 1"/>
+      <!-- Legs -->
+      <geom name="sofa_leg1" type="cylinder" pos="-1.05 -0.45 0.08" size="0.05 0.08" rgba="0.15 0.10 0.06 1"/>
+      <geom name="sofa_leg2" type="cylinder" pos="1.05 -0.45 0.08" size="0.05 0.08" rgba="0.15 0.10 0.06 1"/>
+      <geom name="sofa_leg3" type="cylinder" pos="-1.05 0.45 0.08" size="0.05 0.08" rgba="0.15 0.10 0.06 1"/>
+      <geom name="sofa_leg4" type="cylinder" pos="1.05 0.45 0.08" size="0.05 0.08" rgba="0.15 0.10 0.06 1"/>
+    </body>
+
+    <!-- Coffee table -->
+    <body name="coffee_table" pos="0.2 0.4 0">
+      <geom name="table_top" type="box" pos="0 0 0.42" size="0.8 0.5 0.04" rgba="0.45 0.28 0.16 1"/>
+      <geom name="table_leg1" type="cylinder" pos="-0.7 -0.4 0.21" size="0.04 0.21" rgba="0.35 0.22 0.13 1"/>
+      <geom name="table_leg2" type="cylinder" pos="0.7 -0.4 0.21" size="0.04 0.21" rgba="0.35 0.22 0.13 1"/>
+      <geom name="table_leg3" type="cylinder" pos="-0.7 0.4 0.21" size="0.04 0.21" rgba="0.35 0.22 0.13 1"/>
+      <geom name="table_leg4" type="cylinder" pos="0.7 0.4 0.21" size="0.04 0.21" rgba="0.35 0.22 0.13 1"/>
+    </body>
+
+    <!-- TV stand -->
+    <body name="tv_stand" pos="2.6 1.4 0">
+      <geom name="stand_base" type="box" pos="0 0 0.25" size="0.9 0.35 0.25" rgba="0.30 0.18 0.10 1"/>
+      <geom name="stand_shelf" type="box" pos="0 0 0.55" size="0.9 0.35 0.03" rgba="0.32 0.20 0.11 1"/>
+      <geom name="stand_back" type="box" pos="0 -0.32 0.55" size="0.9 0.03 0.35" rgba="0.28 0.17 0.10 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- TV -->
+    <body name="tv" pos="2.6 1.35 0.62">
+      <geom name="tv_screen" type="box" pos="0 0.03 0.35" size="0.75 0.03 0.45" rgba="0.02 0.02 0.02 1"/>
+      <geom name="tv_frame" type="box" pos="0 0.00 0.35" size="0.80 0.04 0.50" rgba="0.10 0.10 0.10 1" contype="0" conaffinity="0"/>
+      <geom name="tv_base" type="box" pos="0 -0.10 0.05" size="0.25 0.12 0.05" rgba="0.08 0.08 0.08 1"/>
+      <geom name="tv_neck" type="box" pos="0 -0.06 0.18" size="0.08 0.05 0.12" rgba="0.08 0.08 0.08 1"/>
+    </body>
+
+    <!-- Bookshelf -->
+    <body name="bookshelf" pos="-4.6 -1.2 0">
+      <geom name="shelf_frame" type="box" pos="0 0 1.0" size="0.35 1.0 1.0" rgba="0.62 0.45 0.28 1"/>
+      <!-- interior shelves (non-colliding for simplicity) -->
+      <geom name="shelf_1" type="box" pos="0 0 0.45" size="0.32 0.98 0.02" rgba="0.58 0.42 0.26 1" contype="0" conaffinity="0"/>
+      <geom name="shelf_2" type="box" pos="0 0 0.85" size="0.32 0.98 0.02" rgba="0.58 0.42 0.26 1" contype="0" conaffinity="0"/>
+      <geom name="shelf_3" type="box" pos="0 0 1.25" size="0.32 0.98 0.02" rgba="0.58 0.42 0.26 1" contype="0" conaffinity="0"/>
+      <geom name="shelf_4" type="box" pos="0 0 1.65" size="0.32 0.98 0.02" rgba="0.58 0.42 0.26 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Floor lamp -->
+    <body name="floor_lamp" pos="3.8 -2.2 0">
+      <geom name="lamp_base" type="cylinder" pos="0 0 0.02" size="0.18 0.02" rgba="0.15 0.15 0.15 1"/>
+      <geom name="lamp_pole" type="cylinder" pos="0 0 0.85" size="0.03 0.85" rgba="0.20 0.20 0.20 1"/>
+      <geom name="lamp_shade" type="cylinder" pos="0 0 1.55" size="0.22 0.20" rgba="0.95 0.92 0.80 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Window (decorative, non-colliding) -->
+    <body name="window" pos="0 5.78 1.3">
+      <geom name="window_frame" type="box" pos="0 0 0" size="1.4 0.05 0.7" rgba="0.85 0.85 0.85 1" contype="0" conaffinity="0"/>
+      <geom name="window_glass" type="box" pos="0 0.01 0" size="1.3 0.01 0.6" rgba="0.55 0.75 0.90 0.35" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Door (decorative, non-colliding) -->
+    <body name="door" pos="5.78 -3.0 1.0">
+      <geom name="door_panel" type="box" pos="0 0 0" size="0.05 0.9 1.0" rgba="0.70 0.55 0.38 1" contype="0" conaffinity="0"/>
+      <geom name="door_handle" type="cylinder" pos="-0.06 0.25 0.0" size="0.02 0.06" rgba="0.80 0.75 0.20 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Moving objects (freejoint) -->
+    <body name="mug" pos="0.3 0.4 0.52">
+      <freejoint name="mug_free"/>
+      <geom name="mug_body" type="cylinder" pos="0 0 0.05" size="0.045 0.05" rgba="0.90 0.90 0.92 1" density="600"/>
+      <geom name="mug_handle" type="capsule" fromto="0.045 0.0 0.07  0.085 0.0 0.07" size="0.012" rgba="0.90 0.90 0.92 1" density="600"/>
+      <geom name="mug_handle2" type="capsule" fromto="0.085 0.0 0.07  0.045 0.0 0.03" size="0.012" rgba="0.90 0.90 0.92 1" density="600"/>
+    </body>
+
+    <body name="book" pos="0.0 0.55 0.47">
+      <freejoint name="book_free"/>
+      <geom name="book_geom" type="box" size="0.12 0.08 0.015" rgba="0.10 0.35 0.75 1" density="800"/>
+    </body>
+
+    <body name="remote" pos="0.55 0.35 0.47">
+      <freejoint name="remote_free"/>
+      <geom name="remote_geom" type="box" size="0.08 0.02 0.012" rgba="0.05 0.05 0.05 1" density="900"/>
+      <geom name="remote_button_strip" type="box" pos="0.0 0.0 0.010" size="0.06 0.012 0.003" rgba="0.20 0.20 0.20 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- A simple ball/toy on the rug -->
+    <body name="toy_ball" pos="0.0 -0.2 0.08">
+      <freejoint name="toy_ball_free"/>
+      <geom name="toy_ball_geom" type="sphere" size="0.08" rgba="0.95 0.30 0.15 1" density="400"/>
+    </body>
+
+    <!-- Lighting -->
+    <light name="ceiling_light" pos="0 0 2.6" dir="0 0 -1" diffuse="0.9 0.9 0.9" specular="0.2 0.2 0.2" directional="false" cutoff="60"/>
+    <light name="window_light" pos="0 5.0 2.2" dir="0 -1 -0.3" diffuse="0.6 0.7 0.8" specular="0.1 0.1 0.1" directional="true"/>
+    
+    <!-- Camera -->
+    <camera name="main" pos="0 -5.2 2.0" xyaxes="1 0 0 0 0.93 0.37"/>
+  </worldbody>
+
+  <contact>
+    <!-- Keep default contact behavior -->
+  </contact>
+
+  <actuator>
+    <!-- No actuators (no robot specified) -->
+  </actuator>
+</mujoco>
