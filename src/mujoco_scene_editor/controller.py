@@ -12,6 +12,7 @@ from robits.sim.blueprints import Blueprint
 from robits.sim.blueprints import GeomBlueprint
 from robits.sim.blueprints import MeshBlueprint
 from robits.sim.blueprints import RobotBlueprint
+from robits.sim.blueprints import GripperBlueprint
 from robits.sim.blueprints import BlueprintGroup
 from robits.sim.blueprints import Pose
 
@@ -155,17 +156,10 @@ class SceneEditorController:
 
         bps_to_export: List[Blueprint] = []
         for name, bp in self.state.blueprints.items():
-            if isinstance(bp, RobotBlueprint):
-                joint_positions = list(all_joint_positions.get(name, []))
-                if bp.attachment:
-                    joint_positions.extend(
-                        all_joint_positions.get(bp.attachment.gripper_path, [])
-                    )
-                bps_to_export.append(
-                    replace(bp, default_joint_positions=joint_positions)
-                )
-            else:
-                bps_to_export.append(bp)
+            if isinstance(bp, (RobotBlueprint, GripperBlueprint)):
+                joint_positions = list(all_joint_positions.get(name, []))  # TODO M
+                bp = replace(bp, default_joint_positions=joint_positions)
+            bps_to_export.append(bp)
 
         out_path = out_path.with_suffix(".xml")
         blueprint_path = out_path.with_suffix(".json")

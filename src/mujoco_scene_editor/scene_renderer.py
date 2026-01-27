@@ -219,9 +219,14 @@ class ViserSceneRenderer:
                 "Variant %s not implemented. Loading default robot", variant_name
             )
         urdf_desc_name = mj_to_urdf_description_name(desc)
-        return RobotNode(
+        robot_node = RobotNode(
             self.layout, bp.path, urdf_desc_name, position, wxyz, create_eef_gizmo=False
         )
+
+        if bp.default_joint_positions:
+            for slider, q in zip(robot_node.slider_handles, bp.default_joint_positions):
+                slider.value = q
+        return robot_node
 
     @_create_node.register
     def _create_robot_node(self, bp: RobotBlueprint):
@@ -236,9 +241,14 @@ class ViserSceneRenderer:
                 "Variant %s not implemented. Loading default robot", variant_name
             )
         urdf_desc_name = mj_to_urdf_description_name(desc)
-        return RobotNode(
+        robot_node = RobotNode(
             self.layout, bp.path, urdf_desc_name, position, wxyz, create_eef_gizmo=True
         )
+
+        if bp.default_joint_positions:
+            for slider, q in zip(robot_node.slider_handles, bp.default_joint_positions):
+                slider.value = q
+        return robot_node
 
     def add_robot(
         self, bp: RobotBlueprint, gripper_bp: Optional[GripperBlueprint] = None

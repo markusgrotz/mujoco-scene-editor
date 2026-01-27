@@ -83,8 +83,13 @@ class BlueprintAdapter:
                 gripper_config["description_name"],
                 gripper_config.get("variant_name", None),
             )
+            default_joint_positions = config_dict.get("default_joint_positions", None)
             gripper_namespace = f"{bp_name}/{gripper_config['gripper_name']}"
-            gripper_bp = GripperBlueprint(gripper_namespace, model=gripper_description)
+            gripper_bp = GripperBlueprint(
+                gripper_namespace,
+                model=gripper_description,
+                default_joint_positions=default_joint_positions,
+            )
             attachment = Attachment(
                 gripper_bp.path, wrist_name=wrist_name, attachment_offset=offset_pose
             )
