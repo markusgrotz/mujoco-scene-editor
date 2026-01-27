@@ -1,6 +1,6 @@
 [project]
 name = "mujoco-scene-editor"
-version = "0.0.1"
+version = "0.1.0"
 description = "Lightweight scene editor for mujoco"
 readme = "README.md"
 requires-python = ">=3.10,<3.13" # Python 3.9 is EOL. A dm-control dependency is unavailable for newer versions
