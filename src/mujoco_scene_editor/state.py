@@ -6,6 +6,7 @@ from dataclasses import replace
 import logging
 
 from robits.sim.blueprints import Blueprint
+from robits.sim.blueprints import GripperBlueprint
 
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,9 @@ class State:
         old = self.blueprints.get(bp_name, None)
         if old is None:
             logger.error("Blueprint %s not found for update: %s", bp_name, kwargs)
+            return
+        if isinstance(old, GripperBlueprint):
+            logger.info("Not implemented yet")
             return
         self.push_state_to_history()
         self.blueprints[bp_name] = replace(old, **kwargs)
