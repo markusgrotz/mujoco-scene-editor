@@ -22,7 +22,8 @@ from robits.sim.blueprints import GeomBlueprint
 from robits.sim.blueprints import CameraBlueprint
 from robits.sim.blueprints import Pose
 
-from robits.utils import vision_utils
+
+from robits.utils import camera_intrinsics
 
 from robits.cli.cli_utils import setup_cli
 
@@ -73,7 +74,7 @@ def new(open_browser: bool):
             "/camera",
             width=640,
             height=480,
-            intrinsics=vision_utils.intrinsics_from_fovy(0.785398, 640, 480),
+            intrinsics=camera_intrinsics.intrinsics_from_fovy(0.785398, 640, 480),
             pose=Pose().with_position([1.0, 0, 1.5]),
         ),
     ]
