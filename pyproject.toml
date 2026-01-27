@@ -43,10 +43,10 @@ dependencies = [
 dev = ["sphinx", "toml", "myst-parser", "sphinx-rtd-theme", "ruff"]
 
 [project.urls]
-homepage = "https://github.com/markusgrotz/scene_editor"
-repository = "https://github.com/markusgrotz/scene_editor"
-documentation = "https://github.com/markusgrotz/scene_editor"
-tracker = "https://github.com/markusgrotz/scene_editor/issues"
+homepage = "https://github.com/markusgrotz/mujoco_scene_editor"
+repository = "https://github.com/markusgrotz/mujoco_scene_editor"
+documentation = "https://github.com/markusgrotz/mujoco_scene_editor"
+tracker = "https://github.com/markusgrotz/mujoco_scene_editor/issues"
 
 [build-system]
 requires = ["uv_build>=0.9.4,<0.10.0"]
