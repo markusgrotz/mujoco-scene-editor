@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from mujoco_scene_editor.cli import startup_warning  # noqa: F401
 
 from typing import List
 from typing import Optional
