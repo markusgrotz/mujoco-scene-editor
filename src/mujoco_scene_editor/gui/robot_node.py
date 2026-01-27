@@ -13,7 +13,7 @@ from viser import TransformControlsHandle
 from viser.extras import ViserUrdf
 
 from mujoco_scene_editor.utils import viser_utils
-
+from mujoco_scene_editor.utils import urdf_utils
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,11 @@ class RobotNode:
             name, show_axes=False, position=position, wxyz=wxyz
         )
 
-        urdf = load_robot_description(urdf_desc_name)
+        if urdf_desc_name:
+            urdf = load_robot_description(urdf_desc_name)
+        else:
+            logger.warning("Unable to find model. Using fallback model.")
+            urdf = urdf_utils.fallback_urdf_model
 
         self.viser_urdf = ViserUrdf(
             layout.server, urdf_or_path=urdf, root_node_name=self.robot_base.name
