@@ -40,8 +40,7 @@ The following entry points do a exit, which are part of the `scene_editor` sub c
 mjcreate
 
 # Load from MJCF XML or a blueprint JSON
-mjedit --model-name path/to/scene.xml
-mjedit --model-name path/to/scene.json
+mjedit path/to/scene.xml
 
 # Scan a directory for supported assets (obj, stl, ply, glb, gltf, usd)
 scene_editor list-assets --root ~/path/to/assets
@@ -55,10 +54,10 @@ Use the provided chemistry lab MJCF as a starting point:
 
 ```bash
 # With pip-installed package
-mjedit --model-name examples/prompt/scene_chemistry_lab.xml
+mjedit examples/prompt/scene_chemistry_lab.xml
 
 # With uv (no install)
-uv run mjedit --model-name examples/prompt/scene_chemistry_lab.xml
+uv run mjedit examples/prompt/scene_chemistry_lab.xml
 ```
 
 Then:
@@ -78,7 +77,7 @@ export OPENAI_API_KEY=...
 mjprompt
 
 # Edit the generated scene. 
-mjedit --model-name examples/prompt/scene_coffee_shop.xml
+mjedit examples/prompt/scene_coffee_shop.xml
 ```
 Loading a generated scene might not work out of the box in all cases. Generated scenes can have inconsistencies in geometry but can be easily edited.
 ### Examples

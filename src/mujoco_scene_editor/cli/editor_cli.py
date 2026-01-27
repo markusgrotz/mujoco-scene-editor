@@ -217,7 +217,7 @@ Output the complete XML file. The scene is as follows:
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(xml)
 
-    click.echo(f"Edit the model with mjedit --model-name {output_path}")
+    click.echo(f"Edit the model with mjedit {output_path}")
 
 
 def wait_until_keypress(viewer) -> None:
