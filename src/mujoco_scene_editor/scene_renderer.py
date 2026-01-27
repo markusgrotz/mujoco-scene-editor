@@ -216,8 +216,10 @@ class ViserSceneRenderer:
 
         if variant_name:
             logger.warning(
-                "Variant %s not implemented. Loading default robot", variant_name
+                "Variant %s not implemented. Appending to description name.",
+                variant_name,
             )
+            desc = f"{desc}_{variant_name}"
         urdf_desc_name = mj_to_urdf_description_name(desc)
         robot_node = RobotNode(
             self.layout, bp.path, urdf_desc_name, position, wxyz, create_eef_gizmo=False
@@ -238,8 +240,10 @@ class ViserSceneRenderer:
         position, wxyz = viser_utils.pose_to_gui(bp)
         if variant_name:
             logger.warning(
-                "Variant %s not implemented. Loading default robot", variant_name
+                "Variant %s not implemented. Appending to description name.",
+                variant_name,
             )
+            desc = f"{desc}_{variant_name}"
         urdf_desc_name = mj_to_urdf_description_name(desc)
         robot_node = RobotNode(
             self.layout, bp.path, urdf_desc_name, position, wxyz, create_eef_gizmo=True
@@ -258,8 +262,11 @@ class ViserSceneRenderer:
         position, wxyz = viser_utils.pose_to_gui(bp)
         if variant_name:
             logger.warning(
-                "Variant %s not implemented. Loading default robot", variant_name
+                "Variant %s not implemented. Appending to description name.",
+                variant_name,
             )
+            desc = f"{desc}_{variant_name}"
+
         urdf_desc_name = mj_to_urdf_description_name(desc)
         has_gripper = bool(gripper_bp and bp.attachment)
 
