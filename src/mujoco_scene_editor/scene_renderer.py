@@ -150,15 +150,16 @@ class ViserSceneRenderer:
         elif bp.geom_type == "cylinder":
             radius = bp.size[0]
             height = bp.size[1] * 2.0
-            # Viser doesn't expose add_cylinder in this environment. Create a mesh instead.
-            tri = trimesh.creation.cylinder(radius=radius, height=height, sections=32)
-            tri.visual.face_colors = color[:3]
-            node = api.add_mesh_trimesh(
+            node = api.add_cylinder(
                 node_name,
-                mesh=tri,
+                radius,
+                height,
+                color=color,
+                opacity=opacity,
                 position=position,
                 wxyz=wxyz,
             )
+
         elif bp.geom_type == "capsule":
             radius = bp.size[0]
             height = bp.size[1] * 2.0
@@ -191,7 +192,8 @@ class ViserSceneRenderer:
                 wxyz=wxyz,
             )
         else:
-            raise ValueError("Unsupported geom type.")
+            logger.error("Unable to parse blueprint %s", bp)
+            raise ValueError("Unsupported geom type. %s", bp.geom_type)
 
         return node
 
@@ -426,10 +428,9 @@ class ViserSceneRenderer:
         if hasattr(node, "dimensions"):
             self.layout.prop_box_dims.value = node.dimensions
             self.layout.prop_box_dims.disabled = False
-        elif hasattr(node, "mesh"):  # nope that does not work as it is a mesh
-            logger.warning("Not implemented yet.")
-            # self.layout.prop_cyl_radius.value = node.radius
-            # self.layout.prop_cyl_height.value = node.height
+        elif hasattr(node, "height"):
+            self.layout.prop_cyl_radius.value = node.radius
+            self.layout.prop_cyl_height.value = node.height
             self.layout.prop_cyl_radius.disabled = False
             self.layout.prop_cyl_height.disabled = False
         elif hasattr(node, "radius"):
@@ -448,6 +449,7 @@ class ViserSceneRenderer:
         if "size" in kwargs:
             kwargs["dimensions"] = kwargs["size"]
             kwargs["radius"] = kwargs["size"][0]
+            kwargs["height"] = kwargs["size"][1]
 
         for k, v in kwargs.items():
             if hasattr(node, k):

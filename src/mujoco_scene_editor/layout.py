@@ -229,10 +229,10 @@ class SceneEditorLayout:
                 "Sphere radius", 0.01, 2.0, 0.01, 0.05
             )
             self.prop_cyl_radius = self.server.gui.add_slider(
-                "Cylinder radius", 0.01, 2.0, 0.01, 0.05, visible=False
+                "Cylinder radius", 0.01, 2.0, 0.01, 0.05
             )
             self.prop_cyl_height = self.server.gui.add_slider(
-                "Cylinder height", 0.02, 4.0, 0.02, 0.2, visible=False
+                "Cylinder height", 0.02, 4.0, 0.02, 0.2
             )
             self.btn_update_element = self.server.gui.add_button("Update element")
 
