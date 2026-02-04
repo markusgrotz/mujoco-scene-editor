@@ -145,6 +145,16 @@ class SceneEditorController:
     def select(self, name: str) -> None:
         self.renderer.on_select(name)
 
+        if name not in self.state.blueprints:
+            return
+
+        bp = self.state.blueprints[name]
+
+        if isinstance(bp, GeomBlueprint):
+            self.renderer.layout.prop_element_mass.disabled = False
+            self.renderer.layout.prop_element_mass.value = bp.mass
+
+
     def remove(self, name: str) -> None:
         self.state.remove(name)
         self.renderer.remove(name)

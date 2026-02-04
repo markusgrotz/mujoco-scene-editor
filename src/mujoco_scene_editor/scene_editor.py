@@ -90,7 +90,6 @@ class SceneEditor:
         # FIXME we have to access the private variables since it is possible to override the port with environment variables.
         port = server._websock_server._port
         return f"http://localhost:{port}"
-
         # return server.request_share_url()
 
     def show(self) -> None:
@@ -309,5 +308,5 @@ class SceneEditor:
             ]
         else:
             size = None
-
-        self.controller.update_element(sel, color, opacity, size=size)
+        mass = self.layout.prop_element_mass.value
+        self.controller.update_element(sel, color, opacity, size=size, mass=mass)

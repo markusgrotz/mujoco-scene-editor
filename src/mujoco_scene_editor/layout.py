@@ -234,6 +234,9 @@ class SceneEditorLayout:
             self.prop_cyl_height = self.server.gui.add_slider(
                 "Cylinder height", 0.02, 4.0, 0.02, 0.2
             )
+            self.prop_element_mass = self.server.gui.add_slider(
+                "Element mass", 0.02, 4.0, 0.02, 0.2
+            )
             self.btn_update_element = self.server.gui.add_button("Update element")
 
         with self.server.gui.add_folder("Export"):
@@ -254,6 +257,7 @@ class SceneEditorLayout:
         self.prop_sphere_radius.disabled = True
         self.prop_cyl_radius.disabled = True
         self.prop_cyl_height.disabled = True
+        self.prop_element_mass.disabled = True
 
     def update_assets_dropdown(self) -> None:
         names = tuple(self.asset_items.keys()) or (NO_SELECTION,)
