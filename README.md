@@ -1,15 +1,46 @@
-# Scene Editor
-
 [![Supported Python Versions](https://img.shields.io/pypi/pyversions/mujoco-scene-editor)](https://pypi.org/project/mujoco-scene-editor/)
 [![PyPI version](https://img.shields.io/pypi/v/mujoco-scene-editor)](https://pypi.org/project/mujoco-scene-editor/)
 [![License](https://img.shields.io/pypi/l/mujoco-scene-editor)](https://github.com/markusgrotz/mujoco-scene-editor/blob/main/LICENSE.md)
 [![Code style](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+![OS support](https://img.shields.io/badge/OS-macOS%20Linux%20Windows-red)
 
 
-Lightweight, interactive scene editor for MuJoCo 3.x. Create or edit scenes in
+# Scene Editor for MuJoCo
+
+<p align="center">
+   <img src="https://raw.githubusercontent.com/markusgrotz/mujoco-scene-editor/main/assets/logo.png" width="420" />
+</p>
+
+Lightweight, interactive scene editor for [MuJoCo 3.x.](https://mujoco.org/) Create or edit scenes in
 your browser to place shapes, import meshes, add robots, and edit elements interactively.
 
-## Install
+
+## Quickstart
+
+```bash
+pip install mujoco-scene-editor
+
+# Start a fresh, empty scene
+mjcreate
+
+# Load from MJCF XML or a blueprint JSON
+mjedit path/to/scene.xml
+```
+
+
+## Installation
+
+Install the package on [PyPi](https://pypi.org/project/mujoco-scene-editor/) with
+
+```bash
+pip install mujoco-scene-editor
+mjcreate
+```
+This installs necessary dependencies and exposes console scripts.
+The following entry points are available and they are also accessible as `scene-editor` subcommands:
+ - `mjcreate`: Create an empty scene (opens the web browser)
+ - `mjedit`: Edit an existing scene (opens the web browser)
+ - `mjprompt`: Generate a scene from a prompt and save it as a MuJoCo XML
 
 From a local checkout:
 
@@ -19,36 +50,17 @@ pip install -e .
 pip install -e '.[dev]'
 ```
 
-Without installing, you can also run with uv:
+To run with uv, use
 
 ```bash
 # Run the installed console script via uv
-uv run scene_editor --help
-uv run scene_editor new
+uv run scene-editor --help
+uv run scene-editor new
 ```
 
-The following entry points do a exit, which are part of the `scene_editor` sub commands:
- - mjcreate
- - mjedit
- - mjprompt
+When the server starts, it prints the URL and opens your browser. Quit with Ctrl+C or the "Quit server" button.
 
-
-## Quickstart
-
-```bash
-# Start a fresh, empty scene
-mjcreate
-
-# Load from MJCF XML or a blueprint JSON
-mjedit path/to/scene.xml
-
-# Scan a directory for supported assets (obj, stl, ply, glb, gltf, usd)
-scene_editor list-assets --root ~/path/to/assets
-```
-
-When the server starts, it prints a local URL and opens your browser. Quit with Ctrl+C or the "Quit server" button.
-
-## Example
+## Examples
 
 Use the provided chemistry lab MJCF as a starting point:
 
@@ -65,6 +77,8 @@ Then:
 - Use "Add Asset" to insert a local mesh from your file system.
 - Drag the gizmo to change pose; use “Export” to write MJCF/JSON.
 
+Robot models are detected using a heuristic. See the section below on how to configure the editor to use different robot models.
+
 
 ## Prompting / Scene Generation Examples
 
@@ -79,7 +93,8 @@ mjprompt
 # Edit the generated scene. 
 mjedit examples/prompt/scene_coffee_shop.xml
 ```
-Loading a generated scene might not work out of the box in all cases. Generated scenes can have inconsistencies in geometry but can be easily edited.
+Loading a generated scene might not work out of the box in all cases. Generated scenes can have inconsistencies in geometry, but can be easily edited.
+
 ### Examples
 
 Below are some generated example scenes. More examples are available in the `examples/prompt` folder.
@@ -111,9 +126,25 @@ Below are some generated example scenes. More examples are available in the `exa
    </tr>
  </table>
 
+
+## Working with different robots or cameras
+
+Robot models must be specified with a JSON configuration.
+To work with additional robot models, set the `ROBITS_CONFIG_DIR` environment variable to another config folder. See the [RoBits documentation](https://robits.ai/en/latest/configuration.html) for more details.
+
+```bash
+  export ROBITS_CONFIG_DIR=$HOME/code/robits/robits_config/additional_config_sim
+  mjedit examples/prompt/scene_coffee_shop.xml
+```
+
+
 ## Limitations
 
 - Importing MuJoCo XML files may alter the internal structure, and some tags are discarded.
+  - Joints/actuators are discarded if they are not part of a robot description.
+  - Additional geom tags, including friction, conaffinity, or contype are not yet supported and discarded.
+  - Light/option/compiler elements are not implemented yet.
+  
 - Not all MuJoCo robot descriptions have an equivalent URDF representation.
 
 ## Links
