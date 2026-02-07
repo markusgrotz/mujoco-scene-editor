@@ -36,6 +36,10 @@ from mujoco_scene_editor.constants import NO_SELECTION
 logger = logging.getLogger(__name__)
 
 
+def _is_path_or_descendant(path: str, root: str) -> bool:
+    return path == root or path.startswith(f"{root}/")
+
+
 class ViserSceneRenderer:
     def __init__(self, layout) -> None:
         self.name_to_node: Dict[str, SceneNodeHandle] = {}  #
@@ -386,7 +390,7 @@ class ViserSceneRenderer:
 
     def remove(self, node_name: str) -> None:
         for name in list(sorted(self.name_to_node.keys())):
-            if name.startswith(node_name):
+            if _is_path_or_descendant(name, node_name):
                 node = self.name_to_node.pop(name)
                 node.remove()
 

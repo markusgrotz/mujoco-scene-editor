@@ -23,6 +23,10 @@ from mujoco_scene_editor.utils.blueprint_adapter import BlueprintAdapter
 logger = logging.getLogger(__name__)
 
 
+def _is_descendant_path(path: str, root: str) -> bool:
+    return path.startswith(f"{root}/")
+
+
 class SceneEditorController:
     def __init__(self, renderer) -> None:
         self.renderer = renderer

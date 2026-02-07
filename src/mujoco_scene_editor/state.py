@@ -12,6 +12,10 @@ from robits.sim.blueprints import GripperBlueprint
 logger = logging.getLogger(__name__)
 
 
+def _is_path_or_descendant(path: str, root: str) -> bool:
+    return path == root or path.startswith(f"{root}/")
+
+
 class State:
     def __init__(self):
         self.blueprints: Dict[str, Blueprint] = {}
@@ -35,7 +39,7 @@ class State:
             return
         self.push_state_to_history()
         for n in list(sorted(self.blueprints.keys())):
-            if n.startswith(bp_name):
+            if _is_path_or_descendant(n, bp_name):
                 self.blueprints.pop(n)
 
     def update(self, bp_name: str, **kwargs) -> None:
