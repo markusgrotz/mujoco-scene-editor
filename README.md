@@ -2,7 +2,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/mujoco-scene-editor)](https://pypi.org/project/mujoco-scene-editor/)
 [![License](https://img.shields.io/pypi/l/mujoco-scene-editor)](https://github.com/markusgrotz/mujoco-scene-editor/blob/main/LICENSE.md)
 [![Code style](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-![OS support](https://img.shields.io/badge/OS-macOS%20Linux%20Windows-red)
+
 
 
 # Scene Editor for MuJoCo
@@ -34,7 +34,6 @@ Install the package on [PyPi](https://pypi.org/project/mujoco-scene-editor/) wit
 
 ```bash
 pip install mujoco-scene-editor
-mjcreate
 ```
 This installs necessary dependencies and exposes console scripts.
 The following entry points are available and they are also accessible as `scene-editor` subcommands:
@@ -144,6 +143,8 @@ To work with additional robot models, set the `ROBITS_CONFIG_DIR` environment va
   - Joints/actuators are discarded if they are not part of a robot description.
   - Additional geom tags, including friction, conaffinity, or contype are not yet supported and discarded.
   - Light/option/compiler elements are not implemented yet.
+
+If you are looking for a robot editor for MuJoCo that supports all the assets please checkout Robola web
   
 - Not all MuJoCo robot descriptions have an equivalent URDF representation.
 
