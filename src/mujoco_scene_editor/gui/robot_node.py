@@ -56,7 +56,7 @@ class RobotNode:
         self.eef_gizmo: Optional[TransformControlsHandle] = None
 
         if create_eef_gizmo:
-            gizmo_namespace = f"{self.robot_base.name}/eef_gizmo"
+            gizmo_namespace = f"{name}/eef_gizmo"
             self.eef_gizmo = layout.server.scene.add_transform_controls(
                 gizmo_namespace, scale=0.2, visible=True
             )
@@ -91,6 +91,8 @@ class RobotNode:
         self.robot_base.remove()
         if self.eef_gizmo:
             self.eef_gizmo.remove()
+        if self.gripper_node:
+            self.gripper_node.remove()
 
     @property
     def visible(self) -> bool:
@@ -101,6 +103,8 @@ class RobotNode:
         self.robot_base.visible = visible
         if self.eef_gizmo:
             self.eef_gizmo.visible = visible
+        if self.gripper_node:
+            self.gripper_node.visible = visible
 
     def get_joint_positions(self) -> List[float]:
         return self.current_joint_positions.tolist()
