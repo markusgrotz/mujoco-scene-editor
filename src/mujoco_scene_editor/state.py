@@ -21,6 +21,23 @@ class State:
         self.blueprints: Dict[str, Blueprint] = {}
         self.history_past: List[Dict[str, Blueprint]] = []
         self.history_future: List[Dict[str, Blueprint]] = []
+        self._seq = 0
+
+    def sync_seq_from_blueprints(self) -> None:
+        max_suffix = -1
+        has_numeric_suffix = False
+        for bp_name in self.blueprints.keys():
+            leaf = bp_name.rsplit("/", maxsplit=1)[-1]
+            if "_" not in leaf:
+                continue
+            suffix = leaf.rsplit("_", maxsplit=1)[-1]
+            if suffix.isdigit():
+                has_numeric_suffix = True
+                max_suffix = max(max_suffix, int(suffix))
+        if has_numeric_suffix:
+            self._seq = max_suffix + 1
+        else:
+            self._seq = len(self.blueprints)
 
     def create_snapshot(self) -> Dict[str, Blueprint]:
         return deepcopy(self.blueprints)
@@ -32,6 +49,7 @@ class State:
     def add(self, bp: Blueprint) -> None:
         self.push_state_to_history()
         self.blueprints[bp.path] = bp
+        self._seq += 1
 
     def remove(self, bp_name: str) -> None:
         if bp_name not in self.blueprints:
@@ -73,7 +91,8 @@ class State:
         self.blueprints.clear()
         self.history_past.clear()
         self.history_future.clear()
+        self._seq = 0
 
     @property
     def element_seq(self) -> str:
-        return f"{len(self.blueprints):04d}"
+        return f"{self._seq:04d}"

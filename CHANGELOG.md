@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make mass property editable
 - Fixed hierarchy path matching 
 - Add test case for state module
+- Fix element sequence to avoid duplicated element names
 
 ## [0.1.1] - 2026-01-28
 

@@ -35,6 +35,7 @@ class SceneEditorController:
 
     def load_blueprints(self, blueprints: List[Blueprint]):
         self.state.blueprints = {bp.path: bp for bp in blueprints}
+        self.state.sync_seq_from_blueprints()
         self.state.history_past.clear()
         self.state.history_future.clear()
         self.renderer.render_from_state(blueprints)
