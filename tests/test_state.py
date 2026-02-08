@@ -67,6 +67,34 @@ class TestState(unittest.TestCase):
         self.state.redo()
         self.assertDictEqual(self.state.blueprints, {"/foo": bp})
 
+    def test_element_seq_does_not_reuse_after_remove(self):
+        self.state.add(BlueprintGroup("/box_0000"))
+        self.state.add(BlueprintGroup("/box_0001"))
+
+        self.state.remove("/box_0000")
+
+        self.assertEqual(self.state.element_seq, "0002")
+
+    def test_sync_seq_from_blueprints_with_numeric_suffix(self):
+        self.state.blueprints = {
+            "/group/box_0999": BlueprintGroup("/group/box_0999"),
+            "/group/table": BlueprintGroup("/group/table"),
+        }
+
+        self.state.sync_seq_from_blueprints()
+
+        self.assertEqual(self.state.element_seq, "1000")
+
+    def test_sync_seq_from_blueprints_without_numeric_suffix(self):
+        self.state.blueprints = {
+            "/group/table": BlueprintGroup("/group/table"),
+            "/group/lamp": BlueprintGroup("/group/lamp"),
+        }
+
+        self.state.sync_seq_from_blueprints()
+
+        self.assertEqual(self.state.element_seq, "0002")
+
 
 if __name__ == "__main__":
     unittest.main()
