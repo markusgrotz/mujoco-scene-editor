@@ -451,9 +451,9 @@ class ViserSceneRenderer:
         node.opacity = opacity
 
         if "size" in kwargs:
-            kwargs["dimensions"] = kwargs["size"]
+            kwargs["dimensions"] = [a * 2.0 for a in kwargs["size"]]
             kwargs["radius"] = kwargs["size"][0]
-            kwargs["height"] = kwargs["size"][1]
+            kwargs["height"] = kwargs["size"][1] * 2.0
 
         for k, v in kwargs.items():
             if hasattr(node, k):

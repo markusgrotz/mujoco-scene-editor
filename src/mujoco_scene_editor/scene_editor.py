@@ -298,13 +298,14 @@ class SceneEditor:
 
         # TODO revise
         if not self.layout.prop_box_dims.disabled:
-            size = self.layout.prop_box_dims.value
+            dim = self.layout.prop_box_dims.value
+            size = [dim[0] / 2.0, dim[1] / 2.0, dim[2] / 2.0]
         elif not self.layout.prop_sphere_radius.disabled:
-            size = [self.layout.prop_sphere_radius.value]
+            size = [self.layout.prop_sphere_radius.value, 0.0]
         elif not self.layout.prop_cyl_radius.disabled:
             size = [
                 self.layout.prop_cyl_radius.value,
-                self.layout.prop_cyl_height.value,
+                self.layout.prop_cyl_height.value / 2.0,
             ]
         else:
             size = None
