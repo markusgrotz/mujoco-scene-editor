@@ -68,7 +68,7 @@ Use the provided chemistry lab MJCF as a starting point:
 mjedit examples/prompt/scene_chemistry_lab.xml
 
 # With uv (no install)
-uv run mjedit examples/prompt/scene_chemistry_lab.xml
+uv run --with mujoco-scene-editor mjedit examples/prompt/scene_chemistry_lab.xml
 ```
 
 Then:
