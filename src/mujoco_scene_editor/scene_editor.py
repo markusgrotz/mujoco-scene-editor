@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 import subprocess
 
+from mujoco_scene_editor.layout import SceneEditorLayout
 from mujoco_scene_editor.inventory.local_assets import ObjectModel
 from mujoco_scene_editor.inventory.local_assets import Inventory
 from mujoco_scene_editor.inventory.objverse import ObjaverseInventory
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class SceneEditor:
-    def __init__(self, controller, layout) -> None:
+    def __init__(self, controller, layout: SceneEditorLayout) -> None:
         self.controller = controller
         self.layout = layout
 

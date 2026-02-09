@@ -223,7 +223,10 @@ class SceneEditorLayout:
                 "Opacity", 0.0, 1.0, 0.01, 1.0
             )
             self.prop_box_dims = self.server.gui.add_vector3(
-                "Box dimensions", initial_value=(0.1, 0.1, 0.1), step=0.01
+                "Box dimensions",
+                initial_value=(0.1, 0.1, 0.1),
+                min=(0.01, 0.01, 0.01),
+                step=0.01,
             )
             self.prop_sphere_radius = self.server.gui.add_slider(
                 "Sphere radius", 0.01, 2.0, 0.01, 0.05

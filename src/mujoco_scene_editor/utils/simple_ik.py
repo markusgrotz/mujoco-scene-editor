@@ -100,15 +100,12 @@ class SimpleIK:
         position: Tuple[float, float, float],
         wxyz: Tuple[float, float, float, float],
     ) -> np.ndarray:
-        # if self.bp.attachment is None:
-        #    self.bp.attachment = replace(self.bp, attachment=Attachment(blueprint_id="gripper_bp", wrist_name="hand"))
-
         model, data = self.model, self.data
 
         pose = self.bp.pose or Pose()
         transform = pose.matrix
 
-        quat_xyzw = np.concatenate((wxyz[1:], wxyz[:1]))
+        quat_xyzw = viser_utils.wxyz_to_xyzw(wxyz)
 
         new_position, new_xyzw = transform_pose(transform, position, quat_xyzw)
         new_wxyz = np.concatenate((new_xyzw[-1:], new_xyzw[:-1]))
